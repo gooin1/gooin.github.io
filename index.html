@@ -5,9 +5,16 @@
     <title>等待重生...</title>
 </head>
 <body>
-<h2>开始入坑前端啦</h2>
-<p><i>updated in 2016.6.12</i></p>
-<p>这个博客以前是hexo搭建的，到现在荒废了近8个月，这8个月里我都干了些什么？仔细想想好像除了应付考试打游戏，出去浪之外<b>毫无长进</b>，现在刚开始入门前端，就在这个基础上继续吧~</p>
+<h2 id="top">开始入坑前端啦</h2>
+<a href="About.html">About</a>
+<a href="movies.html">Movies</a>
+<a href="books.html">Books</a>
+<a href="2016/06/Reborn/reborn.html">Reborn</a>
+<p><a href="#bottom">到页底</a> </p>
+<p><i>updated in 2016.6.13</i></p>
+<p>这个博客以前是Hexo搭建的，到现在荒废了近8个月，这8个月里我都干了些什么？仔细想想好像除了应付考试打游戏，出去浪之外<b>毫无长进</b>，现在刚开始入门前端，就在这个基础上继续吧~</p>
+<hr />
+
 <h2>下面都是小练习</h2>
 <p></p>
 <h3>加粗文本</h3>
@@ -24,7 +31,7 @@
 
 <h3>换行符和水平线</h3>
 <p>一言不合就(br /)<br />换行<p>
-<hr/><p>(hr /)插入一条<b>水平线</b></p>
+<p>(hr /)插入一条<b>水平线</b></p>
 <p><b>注意：</b>插入水平线之后需要补齐(p)(/p)</p>
 
 <h3>加粗和强调</h3>
@@ -67,15 +74,77 @@
 <p><s>妈的智障</s></p>
 <p>(s)(/s)表示不准确或者不相关的内容，<b>但是不能删除的</b></p>
 
+<h3>列表</h3>
+<p>有序列表（每条项目都有一个编号）、无序列表（前面一个点）、定义列表</p>
+<h4>有序列表ol</h4>
+<ol>
+    <li>**有序列表实例**</li>
+    <li>就是前面有数字序号标识的列表</li>
+    <li>(ol)   创建有序列表</li>
+    <li>(li)一条(li)</li>
+    <li>(li)两条(li)</li>
+    <li>(li)三条(li)</li>
+    <li>(/ol)</li>
+</ol>
+<h4>无序列表ul</h4>
+<ul>
+    <li>前面有个点</li>
+    <li>同有序列表</li>
+    <li>(ul)(/ul)创建无序列表</li>
+</ul>
+
+<h4>定义列表(dl)</h4>
+<dl>
+    <dt>(dt)(/dt)包含被定义的术语</dt>
+    <dd>(dd)(/dd)用来包含定义 blablablablabalablaalalaallaalbala</dd>
+    <dt>ingress</dt>
+    <dd>The World around you is not it seems</dd>
+    <dt>WordOfTime</dt>
+    <dd>时空之音-我曾到过这里</dd>
+</dl>
+<h4>灵活运用-嵌套</h4>
+<dl>
+    <dt>github</dt>
+    <dd>
+        <ul>
+            <li>Git是一个分布式的版本控制系统</li>
+            <li>目录
+                <ol>
+                    <li>基本功能</li>
+                    <li>blablabal</li>
+                    <li>懒得copy</li>
+                    <li>就这样了</li>
+                </ol>
+            </li>
+            <li>shakalaka</li>
+        </ul>
+    </dd>
+</dl>
+
+<h3>链接</h3>
+<ul>我的github项目:
+    <li><a href="https://github.com/gooin/WordOfTime" target="_blank">时空之音</a> </li>
+    <li><a href="https://github.com/gooin/GeoQuiz" target="_blank">地理知识问答</a> </li>
+    <li><a href="https://github.com/gooin/BaiduMapTest1" target="_parent">只能显示我在哪的百度地图</a> </li>
+</ul>
+<p>上面是绝对URL，指向外站</p>
+<ul>相对URL，指向本站的其他页面
+    <li><a href="About.html">关于我</a></li>
+    <li><a href="movies.html">电 影</a></li>
+    <li><a href="books.html">Books</a></li>
+    <li><a href="2016/06/Reborn/reborn.html">Reborn</a> </li>
+    <li><a href="2015/09/20/gooin-on-Hexo/index.html" >long long ago</li>
+</ul>
 
 
 
 
 
-<address>
-    <p><a href="mailto:gooin@outlook.com">gooin@outlook.com</a> </p>
-    <p><abbr title="GanSu Agriculture University">GSAU</abbr></p>
+
+<hr />
+<address id="bottom">
+    <p><a href="mailto:gooin@outlook.com">gooin@outlook.com</a> </p> <p><abbr title="GanSu Agriculture University">GSAU</abbr></p>
 </address>
-
+<p><a href="#top">返回顶部</a></p>
 </body>
 </html>
