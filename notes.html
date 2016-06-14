@@ -6,7 +6,105 @@
 </head>
 <body>
 <h2>下面都是小练习</h2>
-<p></p>
+<hr />
+<p class="important">Displays text to the user and optionally allows them to edit it. </p>
+<p>A TextView is a complete text editor, however the basic class is configured to not allow editing;<br /> see EditText for a subclass that configures the text view for editing.</p>
+
+
+
+
+
+
+<hr />
+<form action="http://gooin.github.io">
+    <p>Username:
+        <input type="text" name="username" size="25" maxlength="30"/>
+    </p><p>Password:
+        <input type="password" name="password" size="25" maxlength="30"/>
+    </p>
+</form>
+<hr />
+<form action="http://gooin.github.io">
+    <p>你有什么好的想法或建议吗？（有也不听，功能还没实现呢..</p>
+        <textarea name="comments" cols="50" rows="5">在这里输入内容...</textarea>
+
+</form>
+
+<form action="http://gooin.github.io">
+    <p><i>今天晚上的毛概课上还是不上</i></p>
+    <input type="radio" name="hehe" value="no" checked="checked"/>不上，上什么上，老师都开始瞎扯淡了
+    <input type="radio" name="hehe" value="yes"/>还是去上吧
+</form>
+<form action="http://gooin.github.io">
+    <p><i>你喜欢用什么播放器听歌</i></p>
+    <input type="checkbox" name="hehe" value="no" checked="checked"/>网易云音乐
+    <input type="checkbox" name="hehe" value="no" checked="checked"/>网易云音乐
+    <input type="checkbox" name="hehe" value="no" checked="checked"/>网易云音乐
+    <input type="checkbox" name="hehe" value="no" />网易云音乐
+    <input type="checkbox" name="hehe" value="no" checked="checked"/>网易云音乐
+
+</form>
+
+<form action="http://gooin.github.io">
+    <p><i>你在哪种设备上听歌</i></p>
+    <select name="devices">
+        <option>PC</option>
+        <option>手机</option>
+        <option>mp3</option>
+        <option>意念</option>
+    </select>
+</form>
+<form action="http://gooin.github.io">
+    <p><i>你在哪种设备上听歌</i></p>
+    <select name="devices" multiple="multiple" size="6">
+        <option>PC</option>
+        <option>PC</option>
+        <option>PC</option>
+        <option>PC</option>
+        <option>PC</option>
+        <option>手机</option>
+        <option>手机</option>
+        <option>手机</option>
+        <option>手机</option>
+        <option>mp3</option>
+        <option>意念</option>
+        <option>意念</option>
+        <option>意念</option>
+    </select>
+</form>
+
+<form method="post">
+    <p>传点资源</p>
+    <input type="file" name="av"/><br />
+    <input type="submit" value="上传">
+</form>
+
+<fieldset>
+    <legend>登录</legend>
+    <label>用户名<br />
+        <input type="text" name="xx"/></label><br />
+    <label>密码<br />
+        <input type="password" name="xx"/></label><br />
+    <label>电话<br />
+        <input type="text" name="xx" /></label><br />
+        <input type="email" name="xx" /></label><br />
+        <input type="url" name="xx" /></label><br />
+        <input type="search" name="xx" /></label><br />
+        <input type="search" name="xx" placeholder="输入内容"/></label><br />
+</fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr />
 <h3>加粗文本</h3>
 <p>可以使用(b)(/b)来<b> 加粗 </b>所需要的内容，（使用圆括号代替尖括号）<b>interesting</b></p>
 
@@ -132,7 +230,6 @@
 <table>
     <tr>
         <th></th>
-        <th>Page</th>
         <th>Price</th>
         <th>love it?</th>
 
@@ -219,6 +316,15 @@
     </tr>
     </tfoot>
 </table>
+<hr />
+<form action="http://gooin.github.io">
+    <p>Username:
+        <input type="text" name="username" size="15" maxlength="12"/>
+
+    </p>
+</form>
+
+
 
 </body>
 </html>
