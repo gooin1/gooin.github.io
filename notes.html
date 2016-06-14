@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+</head>
+<body>
+<h2>下面都是小练习</h2>
+<p></p>
+<h3>加粗文本</h3>
+<p>可以使用(b)(/b)来<b> 加粗 </b>所需要的内容，（使用圆括号代替尖括号）<b>interesting</b></p>
+
+<h3>使用斜体</h3>
+<p>可以使用(i)(/i)来<i> 倾斜 </i>所需要的内容，（使用圆括号代替尖括号）<i>interesting</i></p>
+
+<h3>上标和下标</h3>
+<p>使用(sup)(/sup)使用<sup>上标</sup>,使用(sub)(/sub)使用<sub>下标</sub>。 E=mc<sup>2</sup>,CO<sub>2</sub></p>
+
+<h3>空白(<b>白色空间折叠</b>)</h3>
+<p>当你按了很多空格后，浏览器会只显示一个空格，增强可读性，这一特性称为<b>白   色  空   间  折  叠</b></p>
+
+<h3>换行符和水平线</h3>
+<p>一言不合就(br /)<br />换行<p>
+<p>(hr /)插入一条<b>水平线</b></p>
+<p><b>注意：</b>插入水平线之后需要补齐(p)(/p)</p>
+
+<h3>加粗和强调</h3>
+<p>
+    (strong)(/strong)表示非常重要的内容，<strong>浏览器一般会使用加粗处理</strong>
+    (em)(/em)起强调作用，<em>浏览器中显示为斜体</em>
+</p>
+
+<h3>引用</h3>
+<blockquote cite="http://gooin.github.io">
+    <p>引用比较长的内容,浏览器一般会进行缩进</p>
+</blockquote>
+<p>（blockquote)(/blockquote)引用内容，含有cite特性时(p)元素也应该包含在内</p>
+<p>老司机说，<q>秋名山飙车的次数多了，也就什么都不怕了</q></p>
+<p>较短的引用使用(q)(/q),浏览器把引用的内容加上双引号</p>
+
+<h3>缩写词和首字母缩写词</h3>
+<p><abbr title="Yan Jyh Tau">YZT</abbr>是我的名字</p>
+<p>(abbr title="Yan Jyh Tau")YZT(/abbr)是我的名字,鼠标移动到缩写词处会弹出全写</p>
+
+<h3>引文和定义</h3>
+<p><cite>罗生门</cite>是我正在看的书</p>
+<p>(cite)(/cite)引用作品（书籍电影报告等）时，这个元素可以表明引用的来源</p>
+<p><dfn>老司机</dfn>这个词来自于云南山歌<cite>老司机带带我</cite></p>
+(dfn)(/dfn)表示新术语的定义，一般浏览器使用<i>斜体显示</i>
+
+<h3>设计者详细信息</h3>
+<address>
+    <p><a href="mailto:gooin@outlook.com">gooin@outlook.com</a> </p>
+    <p>GSAU</p>
+</address>
+<p>(address)(/address)可以包含邮箱，地址等等</p>
+
+<h3>内容的修改</h3>
+<p>一加一<del>不等于</del><ins>等于</ins>二</p>
+<p>(del)删除的文本(/del)，内容中带有删除线</p>
+<p>(ins)插入的文本(/ins)，内容中带有下划线</p>
+
+<p>Hello</p>
+<p><s>妈的智障</s></p>
+<p>(s)(/s)表示不准确或者不相关的内容，<b>但是不能删除的</b></p>
+
+<h3>列表</h3>
+<p>有序列表（每条项目都有一个编号）、无序列表（前面一个点）、定义列表</p>
+<h4>有序列表ol</h4>
+<ol>
+    <li>**有序列表实例**</li>
+    <li>就是前面有数字序号标识的列表</li>
+    <li>(ol)   创建有序列表</li>
+    <li>(li)一条(li)</li>
+    <li>(li)两条(li)</li>
+    <li>(li)三条(li)</li>
+    <li>(/ol)</li>
+</ol>
+<h4>无序列表ul</h4>
+<ul>
+    <li>前面有个点</li>
+    <li>同有序列表</li>
+    <li>(ul)(/ul)创建无序列表</li>
+</ul>
+
+<h4>定义列表(dl)</h4>
+<dl>
+    <dt>(dt)(/dt)包含被定义的术语</dt>
+    <dd>(dd)(/dd)用来包含定义 blablablablabalablaalalaallaalbala</dd>
+    <dt>ingress</dt>
+    <dd>The World around you is not it seems</dd>
+    <dt>WordOfTime</dt>
+    <dd>时空之音-我曾到过这里</dd>
+</dl>
+<h4>灵活运用-嵌套</h4>
+<dl>
+    <dt>github</dt>
+    <dd>
+        <ul>
+            <li>Git是一个分布式的版本控制系统</li>
+            <li>目录
+                <ol>
+                    <li>基本功能</li>
+                    <li>blablabal</li>
+                    <li>懒得copy</li>
+                    <li>就这样了</li>
+                </ol>
+            </li>
+            <li>shakalaka</li>
+        </ul>
+    </dd>
+</dl>
+
+<h3>链接</h3>
+<ul>我的github项目:
+    <li><a href="https://github.com/gooin/WordOfTime" target="_blank">时空之音</a> </li>
+    <li><a href="https://github.com/gooin/GeoQuiz" target="_blank">地理知识问答</a> </li>
+    <li><a href="https://github.com/gooin/BaiduMapTest1" target="_parent">只能显示我在哪的百度地图</a> </li>
+</ul>
+<p>上面是绝对URL，指向外站</p>
+<ul>相对URL，指向本站的其他页面
+    <li><a href="About.html">关于我</a></li>
+    <li><a href="movies.html">电 影</a></li>
+    <li><a href="books.html">Books</a></li>
+    <li><a href="2016/06/Reborn/reborn.html">Reborn</a> </li>
+    <li><a href="2015/09/20/gooin-on-Hexo/index.html" >long long ago</a></li>
+</ul>
+
+<img src="images/sunny.png" alt="sunny" title="I'm sunny" width="100" height="100"/>
+
+
+<table>
+    <tr>
+        <th></th>
+        <th>Page</th>
+        <th>Price</th>
+        <th>love it?</th>
+
+
+        <th>test0</th>
+        <th>test1</th>
+    </tr>
+    <tr>
+        <th>Design and Build Websites</th>
+        <td>478</td>
+        <td>￥59.8</td>
+        <td>Y</td>
+        <td rowspan="2">TEST</td>
+    </tr>
+    <tr>
+        <th>JavaScript jQuery</th>
+        <td >555</td>
+        <td>￥79.8</td>
+        <td> Y </td>
+        <td> test </td>
+    </tr>
+</table>
+<hr />
+<table cellpadding="10" cellspacing="5">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Books</th>
+        <th>Movies</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>2016.6.14</th>
+        <td>白夜行</td>
+        <td>Pulp Fiction </td>
+    </tr>
+    <tr>
+        <th>2016.6.14</th>
+        <td>白夜行</td>
+        <td>Pulp Fiction </td>
+    </tr>
+    <tr>
+        <th>2016.6.14</th>
+        <td>白夜行</td>
+        <td>Pulp Fiction </td>
+    </tr>
+    <tr>
+        <th>2016.6.14</th>
+        <td>白夜行</td>
+        <td>Pulp Fiction </td>
+    </tr>
+    <tr>
+        <th>2016.6.14</th>
+        <td>白夜行</td>
+        <td>Pulp Fiction </td>
+    </tr>
+    <tr>
+        <th>2016.6.14</th>
+        <td>白夜行</td>
+        <td>Pulp Fiction </td>
+    </tr>
+    <tr>
+        <th>2016.6.14</th>
+        <td>白夜行</td>
+        <td>Pulp Fiction </td>
+    </tr>
+    <tr>
+        <th>2016.6.14</th>
+        <td>白夜行</td>
+        <td>Pulp Fiction </td>
+    </tr>
+    <tr>
+        <th>2016.6.14</th>
+        <td>白夜行</td>
+        <td>Pulp Fiction </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td></td>
+        <td>21</td>
+        <td>54</td>
+    </tr>
+    </tfoot>
+</table>
+
+</body>
+</html>
