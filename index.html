@@ -16,16 +16,18 @@
         p b{color: #444444;text-align: center}
         a {color: darkcyan;
             }
-        a.mail{color: #2e7ac4; }
-        a:visited{color: #444444;  }
-        a:link{color: #39b3d7}
+
         p {color: #444444;
             text-align: center
         }
-        ul{text-align: center}
+        ul{text-align: center;
+        border-top: 2px solid #ee3e80;
+        border-bottom: 2px solid #ee3e80;
+        padding: 5px}
         li {
             display: inline;
             margin: 0px 3px;}
+
 
     </style>
     <meta name="description"
@@ -34,10 +36,14 @@
           content="gooin"/>
 </head>
 <body>
+<div id="page">
+    <div id="logo" style="text-align: center">
+        <img src="images/sunny.png" alt="xxxx" width="180" height="180"/>
+    </div>
 
 <div>
     <ul id="navigation">
-  <li><a id="top" href="About.html">About</a></li>
+        <li><a id="top" href="About.html">About</a></li>
         <li><a href="movies.html">Movies</a></li>
         <li><a href="books.html">Books</a></li>
         <li><a href="2016/06/Reborn/reborn.html">Reborn</a></li>
@@ -76,7 +82,7 @@
 <address id="bottom">
     <p><b>&copy; gooin</b> <a class="mail" href="mailto:gooin@outlook.com">联系我</a> </p>
 </address>
-
+</div>
 </body>
 </html>
 
