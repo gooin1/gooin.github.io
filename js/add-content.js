@@ -4,12 +4,12 @@
 var today = new Date();
 var hourNow = today.getHours();
 var hello;
-if (hourNow > 18) {
+if (hourNow >= 18) {
     hello = '晚上好~';
 } else if (hourNow > 12) {
-    hello = '中午好';
+    hello = '中午好~';
 } else if (hourNow > 0) {
-    hello = '早上好';
+    hello = '早上好~';
 } else {
     hello = '欢迎';
 }
