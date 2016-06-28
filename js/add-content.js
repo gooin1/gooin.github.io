@@ -10,7 +10,7 @@ if (hourNow >= 18) {
     hello = '中午好~';
 } else if (hourNow > 0) {
     hello = '早上好~';
-} else {
-    hello = '欢迎';
+} else if (hourNow >14){
+    hello = '下午好';
 }
-document.write('<h4 class="hello">'+"现在是"+hourNow+"点,"+hello+'</h4>');
+document.write('<h4 class="hello">'+"现在是"+hourNow+"点过一点,"+hello+'</h4>');
