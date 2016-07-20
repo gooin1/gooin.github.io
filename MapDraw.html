@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Map Draw</title>
+    <link href="css/mapDefault.css" type="text/css" rel="stylesheet"/>
+
+    <script src="libs/jquery-1.7.1.min.js" type="text/javascript"></script>
+    <script src="libs/OpenLayers.js" type="text/javascript"></script>
+    <script src="libs/zdclient.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        var map, layer, vectLayer, polyLayer, drawPoint, drawPolygon;
+
+
+        function init() {
+            map = new OpenLayers.Map('map1',
+                    {
+                        controls: [
+                            new OpenLayers.Control.PanZoomBar(),
+                            new OpenLayers.Control.LayerSwitcher(),
+                            new OpenLayers.Control.Navigation(),
+                            new OpenLayers.Control.MousePosition()
+                        ]
+                    }
+            );
+
+            layer = new Zondy.Map.GoogleLayer("Google Map VEC",
+                    {
+                        layerType: Zondy.Enum.GoogleLayerType.VEC,
+                        isBaseLayer: true
+                    }
+            );
+
+            map.addLayer(layer);
+            map.setCenter(new OpenLayers.LonLat(0, 0), 2);
+        }
+
+
+        function Point1() {
+//          创建点
+            drawPoint = new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Point);
+            map.addControl(drawPoint);
+            drawPoint.activate();
+        }
+
+        function Polygon1() {
+//            创建多边形
+            drawPolygon = new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Polygon);
+            map.addControl(drawPolygon);
+            drawPolygon.activate();
+        }
+
+        function initPointLayer() {
+//            创建一个图层用于画点/线
+            vectLayer = new OpenLayers.Layer.Vector("23333");
+            map.addLayer(vectLayer);
+            Point1();
+        }
+
+        function initPolygonLayer() {
+            vectLayer = new OpenLayers.Layer.Vector("23333");
+            map.addLayer(vectLayer);
+            Polygon1();
+        }
+
+
+        function PaintPoint() {
+
+            if (vectLayer == null) {
+                initPointLayer();
+            }
+
+        }
+
+        function PaintPolygon() {
+
+            if (vectLayer == null) {
+                initPolygonLayer();
+            }
+        }
+
+
+
+        function clearGraphics() {
+            if (vectLayer) {
+                map.removeLayer(vectLayer);
+            }
+            vectLayer = null;
+            drawPoint.deactivate();
+            drawPolygon.deactivate();
+        }
+
+
+    </script>
+
+</head>
+
+
+<body onload="init()">
+<div class="ToolLib">
+    <input type="button" class="ButtonLib" value="draw point" onclick="PaintPoint()"/>
+    <input type="button" class="ButtonLib" value="draw Polygon" onclick="PaintPolygon()"/>
+    <input type="button" class="ButtonLib" value="clear all graphics" onclick="clearGraphics()"/>
+
+    <p><b>Warning:</b> You must click "clear all graphics" button before create new elements! </p>
+
+
+</div>
+
+<div id="map1"></div>
+
+</body>
+</html>
