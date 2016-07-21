@@ -50,6 +50,7 @@
             drawPolygon = new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.RegularPolygon);
             map.addControl(drawPolygon);
             drawPolygon.activate();
+
             drawPolygon.handler.setOptions(
                     {
                         sides:5
@@ -69,6 +70,7 @@
 
         function initPolygonLayer() {
             vectLayer = new OpenLayers.Layer.Vector("23333");
+            vectLayer.styleMap.styles["default"].defaultStyle.fillColor = "#536dfe ";
             map.addLayer(vectLayer);
             Polygon1();
         }
