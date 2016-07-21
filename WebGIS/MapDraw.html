@@ -54,7 +54,6 @@
             drawPolygon.handler.setOptions(
                     {
                         sides:5
-
                     }
 
             )
@@ -71,6 +70,7 @@
         function initPolygonLayer() {
             vectLayer = new OpenLayers.Layer.Vector("23333");
             vectLayer.styleMap.styles["default"].defaultStyle.fillColor = "#536dfe ";
+            vectLayer.styleMap.styles["default"].defaultStyle.strokeColorColor = "#536dfe  ";
             map.addLayer(vectLayer);
             Polygon1();
         }
