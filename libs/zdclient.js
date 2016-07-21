@@ -3773,7 +3773,7 @@ Zondy.Object.Point2D = OpenLayers.Class(Zondy.Object.Tangram, {
 /*----------------------------------------------------------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------PointForQuery.js---------------------------------------------------------*/
-Zondy.Object.PointForQuery = OpenLayers.Class(Zondy.Object.Point2D, {
+ Zondy.Object.PointForQuery = OpenLayers.Class(Zondy.Object.Point2D, {
 
     initialize: function (x, y) {
         /// <summary>构造函数</summary>

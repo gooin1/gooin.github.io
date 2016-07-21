@@ -13,12 +13,37 @@
 
 
     <script type="text/javascript">
+        var map,layer;
+        var drawLayer=null;
 
+        function init() {
+            map = new OpenLayers.Map('map1',
+                    {
+                        controls: [
+                            new OpenLayers.Control.PanZoomBar(),
+                            new OpenLayers.Control.LayerSwitcher(),
+                            new OpenLayers.Control.Navigation(),
+                            new OpenLayers.Control.MousePosition()
+                        ]
+                    }
+            );
 
+            layer = new Zondy.Map.Doc('MDZZ', 'WorldMKT', {
+                ip: "127.0.0.1",
+                port: '6163',
+                isBaseLayer: true
+            });
+            map.addLayers([layer]);
+            map.setCenter(new OpenLayers.LonLat(11544046, 4312771), 3);
+        }
 
+//        初始化要高亮的图层
+        function initDrawLayer(){
+            drawLayer = new OpenLayers.Layer.Vector("Highlight");
+            map.addLayer(drawLayer);
+        }
 
-        function QueryByPNt() {
-
+        function QueryByPNT() {
             //创建查询结构
             var queryStruct = new Zondy.Service.QueryFeatureStruct(
                     {
@@ -55,12 +80,24 @@
                         port: "6163"
                     }
             );
-//            实现查询操作,querySuccess回调函数
+
+
+
+            //            实现查询操作,querySuccess回调函数
             queryService.query(querySuccess);
 
             function querySuccess(result) {
                 var FormatData = JSON.stringify(result);
                 Process(FormatData, 1, "resultTable"/*存放查询结果id位置*/);
+
+                //初始化高亮图层
+                initDrawLayer();
+
+                var format = new Zondy.Format.PolygonJSON();
+                var features = format.read(result);
+
+                drawLayer.setVisibility(true);
+                drawLayer.addFeatures(features);
 
             }
 
@@ -71,7 +108,7 @@
 </head>
 <body onload="init()"  >
 <div class="ToolLib">
-    <input type="button" class="ButtonLib" value="point" onclick="QueryByPNt()"/>
+    <input type="button" class="ButtonLib" value="HighLight And Show Details" onclick="QueryByPNT()"/>
     <!--<input type="button" class="ButtonLib" value="draw Polygon" onclick="PaintPolygon()"/>-->
     <!--<input type="button" class="ButtonLib" value="clear all graphics" onclick="clearGraphics()"/>-->
 
@@ -79,8 +116,12 @@
 
 
 </div>
+<div id="map1"></div>
 
-<div id="resultTable"></div>
+
+<aside id="resultTable">
+
+</aside>
 
 </body>
 </html>
