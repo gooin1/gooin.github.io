@@ -47,9 +47,17 @@
 
         function Polygon1() {
 //            创建多边形
-            drawPolygon = new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Polygon);
+            drawPolygon = new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.RegularPolygon);
             map.addControl(drawPolygon);
             drawPolygon.activate();
+            drawPolygon.handler.setOptions(
+                    {
+                        sides:5
+
+                    }
+
+            )
+
         }
 
         function initPointLayer() {
