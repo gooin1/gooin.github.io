@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>几何图形绘制</title>
+
+    <!--导入外部样式表-->
+    <link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+    <!--必要的脚本引用-->
+    <script src="../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../libs/OpenLayers.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map,layer;
+        var drawControls = null; //矢量图形绘制控件数组
+//        var ModifyControl = null; //矢量图形编辑控件
+        var vectLayer = null;      //矢量要素图层
+
+        //页面初始化函数
+        function init() {
+            /*==================地图显示==================*/
+            map = new OpenLayers.Map('map1', {
+                controls: [
+                    new OpenLayers.Control.Zoom(),
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.LayerSwitcher(),
+                    new OpenLayers.Control.MousePosition()
+                ]
+            });
+            layer = new OpenLayers.Layer.OSM("Simple OSM Map");
+            map.addLayer(layer);
+            //设置地图初始显示级数和中心
+            map.setCenter(new OpenLayers.LonLat(114.3, 30.6), 2);
+        }
+        /*==================绘制图形==================*/
+        //初始化绘图控件与图形编辑控件
+        function initDrawLayer() {
+            vectLayer = new OpenLayers.Layer.Vector("VectLayer");
+            map.addLayer(vectLayer);
+            //添加交互绘制矢量图形的控件（点、线、多边形）
+//            ModifyControl = new OpenLayers.Control.ModifyFeature(vectLayer);
+//            map.addControl(ModifyControl);
+
+            drawControls = {
+                point: new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Point),//绘制点
+                line: new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Path),//绘制线
+                polygon: new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Polygon),//绘制多边形
+                RegularPolygon: new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.RegularPolygon)//绘制规则多边形
+            };
+
+            for (var key in drawControls) {
+                map.addControl(drawControls[key]);
+            }
+        }
+
+        //根据当前选择的绘制选项，切换绘制矢量图形的控件
+        function drawControl(typeIndex, featureType) {
+            if (vectLayer == null) {
+                initDrawLayer();
+            }
+            DeactiveDraw();
+//            ModifyControl.deactivate(); //关闭图形编辑控件激活状态
+//            document.getElementById("modifyFeature").checked = false;
+            for (key in drawControls) {
+                var control = drawControls[key];
+                if (featureType == key) {
+                    control.activate(); //激活图形绘制控件
+                    switch (typeIndex) {
+                        case 1:
+                            control.handler.setOptions({ sides: 40 }); //绘制类型：圆形
+                            break;
+                        case 3:
+                            control.handler.setOptions({ sides: 3 }); //绘制类型：三角形
+                            break;
+                        case 4:
+                            control.handler.setOptions({ sides: 4 }); //绘制类型：矩形
+                            break;
+                        case 5:
+                            control.handler.setOptions({ sides: 5 }); //绘制类型：五边形
+                            break;
+                        case 6:
+                            control.handler.setOptions({ sides: 6 }); //绘制类型：六边形
+                            break;
+                    }
+
+                } else {
+                    control.deactivate(); //关闭图形绘制控件激活状态
+                }
+            }
+        }
+
+        //取消矢量图形绘制控件的激活状态
+        function DeactiveDraw() {
+            for (key in drawControls) {
+                var control = drawControls[key];
+                control.deactivate(); //关闭图形绘制控件激活状态
+            }
+        }
+
+//        //编辑几何图形
+//        function modifyFeature(element) {
+//            if (element != null) {
+//                if (element.checked) {
+//                    DeactiveDraw(); //取消矢量图形绘制控件的激活状态
+//                    ModifyControl.activate(); //激活图形编辑控件
+//                }
+//                else {
+//                    ModifyControl.deactivate(); //关闭图形编辑控件激活状态
+//                }
+//            }
+//        }
+
+        //清除绘制的图形
+        function clearGraphics() {
+            if (vectLayer) {
+                map.removeLayer(vectLayer);
+            }
+            vectLayer = null;
+            DeactiveDraw();
+//            ModifyControl.deactivate(); //关闭图形编辑控件激活状态
+//            document.getElementById("modifyFeature").checked = false;
+        }
+    </script>
+</head>
+<body onload="init()">
+<div class="ToolLib">
+    <input type="button" class="ButtonLib" value="绘制点" onclick="drawControl(0,'point')"/>
+    <input type="button" class="ButtonLib" value="绘制圆" onclick="drawControl(1,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制线" onclick="drawControl(2,'line')"/>
+    <input type="button" class="ButtonLib" value="绘制矩形" onclick="drawControl(4,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制三角形" onclick="drawControl(3,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制五边形" onclick="drawControl(5,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制六边形" onclick="drawControl(6,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制多边形" onclick="drawControl(7,'polygon')"/>
+    <input type="button" class="ButtonLib" value="清除所有图形" onclick="clearGraphics()"/>
+    <!--<input type="checkbox" name="type" value="modify" id="modifyFeature" onclick="modifyFeature(this);" />-->
+    <!--<label for="modifyToggle">允许修改几何图形</label>-->
+</div>
+<div id="map1"></div>
+</body>
+</html>

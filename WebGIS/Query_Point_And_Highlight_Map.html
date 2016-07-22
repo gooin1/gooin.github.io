@@ -13,8 +13,8 @@
 
 
     <script type="text/javascript">
-        var map,layer;
-        var drawLayer=null;
+        var map, layer;
+        var drawLayer = null;
 
         function init() {
             map = new OpenLayers.Map('map1',
@@ -37,8 +37,8 @@
             map.setCenter(new OpenLayers.LonLat(11544046, 4312771), 3);
         }
 
-//        初始化要高亮的图层
-        function initDrawLayer(){
+        //        初始化要高亮的图层
+        function initDrawLayer() {
             drawLayer = new OpenLayers.Layer.Vector("Highlight");
             map.addLayer(drawLayer);
         }
@@ -48,33 +48,37 @@
             var queryStruct = new Zondy.Service.QueryFeatureStruct(
                     {
                         //要查询的信息
-                        IncludeGeometry: true, //几何图形信息0
+                        IncludeGeometry: true, //几何图形信息
                         IncludeAttribute: true,//属性
                         IncludeGraphic: true  //图形参数
                     }
             );
 
 //            创建查询形状(点)
-            var pointObj = new Zondy.Object.PointForQuery(11544046, 4312771);
+//            var pointObj = new Zondy.Object.PointForQuery(11544046, 4312771);
+            var lineObj = [new Zondy.Object.PointForQuery(11544046, 4312771), new Zondy.Object.PointForQuery(1623478, 5003018)];
+//            lineObj[0] = new Zondy.Object.PointForQuery(11544046, 4312771);
+//            lineObj[1] = new Zondy.Object.PointForQuery(1623478,5003018);
+            var polyLine = new Zondy.Object.PolyLineForQuery(lineObj);
+
 //            地图容差  在点的0.3范围内可被选取
-            pointObj.nearDis = 0.3;
+//            pointObj.nearDis = 0.3;
 
 //            创建查询参数
             var queryParm = new Zondy.Service.QueryParameter(
                     {
-                        geometry: pointObj,  //查询点
+//                        geometry: pointObj,  //查询点
+                        geometry: polyLine,  //查询点
                         resultFormat: "json", //输出结果格式为json
                         struct: queryStruct   //
                     }
             );
 
 
-
 //            创建被查询对象
             var queryService = new Zondy.Service.QueryDocFeature(
                     queryParm/*调用查询参数函数*/,
-                    "WorldMKT",1
-                    ,
+                    "WorldMKT", 2/*查询图层*/,
                     {
                         ip: "127.0.0.1",
                         port: "6163"
@@ -82,31 +86,29 @@
             );
 
 
-
-            //            实现查询操作,querySuccess回调函数
+            //  实现查询操作,querySuccess回调函数
             queryService.query(querySuccess);
 
-            function querySuccess(result) {
-                var FormatData = JSON.stringify(result);
-                Process(FormatData, 1, "resultTable"/*存放查询结果id位置*/);
+        }
+        function querySuccess(result) {
+            var FormatData = JSON.stringify(result);
+            Process(FormatData, 1, "resultTable"/*存放查询结果id位置*/);
 
-                //初始化高亮图层
-                initDrawLayer();
+            //初始化高亮图层
+            initDrawLayer();
 
-                var format = new Zondy.Format.PolygonJSON();
-                var features = format.read(result);
+            var format = new Zondy.Format.PolygonJSON();
+            var features = format.read(result);
 
-                drawLayer.setVisibility(true);
-                drawLayer.addFeatures(features);
-
-            }
+            drawLayer.setVisibility(true);
+            drawLayer.addFeatures(features);
 
         }
 
 
     </script>
 </head>
-<body onload="init()"  >
+<body onload="init()">
 <div class="ToolLib">
     <input type="button" class="ButtonLib" value="HighLight And Show Details" onclick="QueryByPNT()"/>
     <!--<input type="button" class="ButtonLib" value="draw Polygon" onclick="PaintPolygon()"/>-->

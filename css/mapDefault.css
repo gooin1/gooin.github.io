@@ -43,7 +43,7 @@ aside {
 
 .ButtonLib:hover, a.add:hover, a.show:hover {
 
-    background-color: #000;
+    background-color: #1c94c4;
     color: #fff;
     cursor: pointer;
 }

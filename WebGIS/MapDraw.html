@@ -11,10 +11,15 @@
 
     <script type="text/javascript">
 
-        var map, layer, vectLayer, polyLayer, drawPoint, drawPolygon;
+        var map, layer;
+
+        var vectLayer = null;
+        var ModifyControl = null;
+        var drawControls = null;
 
 
         function init() {
+//            地图显示
             map = new OpenLayers.Map('map1',
                     {
                         controls: [
@@ -33,73 +38,100 @@
                     }
             );
 
+
             map.addLayer(layer);
             map.setCenter(new OpenLayers.LonLat(0, 0), 2);
         }
 
 
-        function Point1() {
-//          创建点
-            drawPoint = new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Point);
-            map.addControl(drawPoint);
-            drawPoint.activate();
+        //        绘制图形
+        function initDrawLayer() {
+//
+            vectLayer = new OpenLayers.Layer.Vector("Vect");
+            map.addLayer(vectLayer);
+//          添加交互绘制矢量图形的控件（点、线、多边形）
+            ModifyControl = new OpenLayers.Control.ModifyFeature(vectLayer);
+            map.addControl(ModifyControl);
+
+            drawControls = {
+                point: new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Point),
+                line: new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Path),
+                polygon: new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.Polygon),
+                regularPolygon: new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.RegularPolygon)
+            };
+
+
+            for (var key in drawControls) {
+                map.addControl(drawControls[key]);
+            }
         }
 
-        function Polygon1() {
-//            创建多边形
-            drawPolygon = new OpenLayers.Control.DrawFeature(vectLayer, OpenLayers.Handler.RegularPolygon);
-            map.addControl(drawPolygon);
-            drawPolygon.activate();
+        function drawControl(typeIndex, featureType) {
+            if (vectLayer == null) {
+                initDrawLayer();
+            }
 
-            drawPolygon.handler.setOptions(
-                    {
-                        sides:5
+            DeactiveDraw();
+
+            ModifyControl.deactivate();
+            document.getElementById("modifyFeature").checked = false;
+
+            for (key in drawControls) {
+                var control = drawControls[key];
+                if (featureType == key) {
+                    control.activate();
+
+                    switch (typeIndex) {
+                        case 1:
+                            control.handler.setOptions({sides: 50});
+                            break;
+                        case 3:
+                            control.handler.setOptions({sides: 3});
+                            break;
+                        case 4:
+                            control.handler.setOptions({sides: 4});
+                            break;
+                        case 5:
+                            control.handler.setOptions({sides: 5});
+                            break;
+                        case 6:
+                            control.handler.setOptions({sides: 5});
+                            break;
                     }
 
-            )
-
-        }
-
-        function initPointLayer() {
-//            创建一个图层用于画点/线
-            vectLayer = new OpenLayers.Layer.Vector("23333");
-            map.addLayer(vectLayer);
-            Point1();
-        }
-
-        function initPolygonLayer() {
-            vectLayer = new OpenLayers.Layer.Vector("23333");
-            vectLayer.styleMap.styles["default"].defaultStyle.fillColor = "#536dfe ";
-            vectLayer.styleMap.styles["default"].defaultStyle.strokeColorColor = "#536dfe  ";
-            map.addLayer(vectLayer);
-            Polygon1();
-        }
-
-
-        function PaintPoint() {
-
-            if (vectLayer == null) {
-                initPointLayer();
-            }
-
-        }
-
-        function PaintPolygon() {
-
-            if (vectLayer == null) {
-                initPolygonLayer();
+                } else {
+                    control.deactivate();
+                }
             }
         }
 
+        function DeactiveDraw() {
+            for (key in drawControls) {
+                var control = drawControls[key];
+                control.deactivate(); //关闭图形绘制控件激活状态
+            }
+        }
 
+        function modifyFeature(element) {
+            if (element != null) {
+                if (element.checked) {
+                    DeactiveDraw();
+                    ModifyControl.activate();
+                } else {
+                    ModifyControl.deactivate();
+                }
+            }
+        }
 
+        //清除绘制的图形
         function clearGraphics() {
             if (vectLayer) {
                 map.removeLayer(vectLayer);
             }
             vectLayer = null;
-            drawPoint.deactivate();
-            drawPolygon.deactivate();
+            DeactiveDraw();
+            ModifyControl.deactivate(); //关闭图形编辑控件激活状态
+            document.getElementById("modifyFeature").checked = false;
         }
 
 
@@ -110,12 +142,17 @@
 
 <body onload="init()">
 <div class="ToolLib">
-    <input type="button" class="ButtonLib" value="draw point" onclick="PaintPoint()"/>
-    <input type="button" class="ButtonLib" value="draw Polygon" onclick="PaintPolygon()"/>
-    <input type="button" class="ButtonLib" value="clear all graphics" onclick="clearGraphics()"/>
-
-    <p><b>Warning:</b> You must click "clear all graphics" button before create new elements! </p>
-
+    <input type="button" class="ButtonLib" value="绘制点" onclick="drawControl(0,'point')"/>
+    <input type="button" class="ButtonLib" value="绘制圆" onclick="drawControl(1,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制线" onclick="drawControl(2,'line')"/>
+    <input type="button" class="ButtonLib" value="绘制矩形" onclick="drawControl(4,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制三角形" onclick="drawControl(3,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制五边形" onclick="drawControl(5,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制六边形" onclick="drawControl(6,'RegularPolygon')"/>
+    <input type="button" class="ButtonLib" value="绘制多边形" onclick="drawControl(7,'polygon')"/>
+    <input type="button" class="ButtonLib" value="清除所有图形" onclick="clearGraphics()"/>
+    <input type="checkbox" name="type" value="modify" id="modifyFeature" onclick="modifyFeature(this);" />
+    <label for="modifyToggle">允许修改几何图形</label>
 
 </div>
 
