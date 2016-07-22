@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+
+    <script src="../libs/jquery-1.7.1.min.js" type="text/javascript"></script>
+    <script src="../libs/OpenLayers.js" type="text/javascript"></script>
+    <script src="../libs/zdclient.js" type="text/javascript"></script>
+    <script src="../libs/jsonformat/json2.js" type="text/javascript"></script>
+    <script src="../libs/jsonformat/jsonExtend.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map;
+        var layer;
+        var drawLayer;
+        var drawControl;
+
+        function init() {
+//            创建地图容器
+            map = new OpenLayers.Map("map1", {
+//            添加控件
+                controls: [
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.MousePosition(),
+                    new OpenLayers.Control.LayerSwitcher(),
+                    new OpenLayers.Control.OverviewMap()
+                ]
+            });
+
+            layer = new Zondy.Map.Doc("BaseLayer", "WorldMKT", {
+                ip: "127.0.0.1",
+                port: "6163",
+                isBaseLayer: true
+            });
+//          添加图层
+            map.addLayers([layer]);
+//            设置显示中心和级别
+            map.setCenter(new OpenLayers.LonLat(11544046, 4312771), 3);
+            initDraw();
+        }
+
+
+        function initDraw() {
+//            添加一个绘制图层
+            drawLayer = new OpenLayers.Layer.Vector("DrawLayer");
+            map.addLayer(drawLayer);
+//          创建并添加控件  点
+            drawControl = new OpenLayers.Control.DrawFeature(drawLayer, OpenLayers.Handler.Point);
+            drawControl.featureAdded = callBack;
+            map.addControl(drawControl);
+        }
+        function callBack(feature) {
+//            创建查询结构
+            var queryStruct = new Zondy.Service.QueryFeatureStruct(
+                    {
+//                        要查询的信息
+                        IncludeGeometry: true,
+                        IncludeAttribute: true,
+                        IncludeGraphic: true
+                    }
+            );
+//
+            var pointObj = new Zondy.Object.PointForQuery();
+//            传入OpenLayer的点的坐标
+            pointObj.setByOL(feature.geometry);
+
+//            在点击下一个点时清除之前的点
+            feature.destroy();
+//            创建查询参数
+            var queryParm = new Zondy.Service.QueryParameter(
+                    {
+                        geometry:pointObj,
+                        resultFormat:"json",
+                        struct:queryStruct
+                    });
+//            创建查询服务
+            var queryService =new Zondy.Service.QueryDocFeature(queryParm,"WorldMKT",1,{
+                ip:"127.0.0.1",
+                port:"6163"
+            });
+
+
+            queryService.query(onSuccess);
+
+        }
+
+
+        function startQuery() {
+            if (drawControl) {
+
+                drawControl.activate();
+            }
+
+        }
+
+        function onSuccess(data) {
+            var formatData = JSON.stringify(data);
+            Process(formatData, 1, "resultTable");
+        }
+
+
+    </script>
+</head>
+<body onload="init()">
+<div class="ToolLib">
+    <input type="button" class="ButtonLib" value="开始查询" onclick="startQuery()"/>
+
+</div>
+
+<div id="map1"></div>
+
+
+<aside id="resultTable">
+
+</aside>
+
+</body>
+</html>

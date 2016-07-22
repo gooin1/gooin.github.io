@@ -55,11 +55,11 @@
             );
 
 //            创建查询形状(点)
-//            var pointObj = new Zondy.Object.PointForQuery(11544046, 4312771);
-            var lineObj = [new Zondy.Object.PointForQuery(11544046, 4312771), new Zondy.Object.PointForQuery(1623478, 5003018)];
+            var pointObj = new Zondy.Object.PointForQuery(11544046, 4312771);
+//            var lineObj = [new Zondy.Object.PointForQuery(11544046, 4312771), new Zondy.Object.PointForQuery(1623478, 5003018)];
 //            lineObj[0] = new Zondy.Object.PointForQuery(11544046, 4312771);
 //            lineObj[1] = new Zondy.Object.PointForQuery(1623478,5003018);
-            var polyLine = new Zondy.Object.PolyLineForQuery(lineObj);
+//            var polyLine = new Zondy.Object.PolyLineForQuery(lineObj);
 
 //            地图容差  在点的0.3范围内可被选取
 //            pointObj.nearDis = 0.3;
@@ -67,8 +67,8 @@
 //            创建查询参数
             var queryParm = new Zondy.Service.QueryParameter(
                     {
-//                        geometry: pointObj,  //查询点
-                        geometry: polyLine,  //查询点
+                        geometry: pointObj,  //查询点
+//                        geometry: polyLine,  //查询线
                         resultFormat: "json", //输出结果格式为json
                         struct: queryStruct   //
                     }
@@ -78,7 +78,7 @@
 //            创建被查询对象
             var queryService = new Zondy.Service.QueryDocFeature(
                     queryParm/*调用查询参数函数*/,
-                    "WorldMKT", 2/*查询图层*/,
+                    "WorldMKT", 1/*查询图层*/,
                     {
                         ip: "127.0.0.1",
                         port: "6163"

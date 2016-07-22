@@ -3,7 +3,7 @@ body {
     background-color: #efefef;}
 
 aside {
-
+    width: 25%;
     float: left;
     border: 2px double #1c94c4;
     margin: 10px 10px 10px 10px;
@@ -13,10 +13,9 @@ aside {
 
 #map1 {
     float: left;
-    margin: 10px 10px 10px 10px;
     overflow: hidden;
 
-    width: 750px;
+    width: 70%;
     height: 750px;
     border-right: 1px solid #eeeeee;
     font-family: "微软雅黑";
@@ -29,7 +28,7 @@ aside {
 }
 
 .ButtonLib {
-    margin: 10px auto 10px auto;
+
     background-color:#1d75b3;
     color: #fcf8e3;
     border-radius: 8px;
