@@ -15,6 +15,7 @@
         var layer;
         var drawLayer;
         var drawControl;
+        var highltLayer;
 
         function init() {
 //            创建地图容器
@@ -50,6 +51,9 @@
             drawControl.featureAdded = callBack;
             map.addControl(drawControl);
         }
+
+
+
         function callBack(feature) {
 //            创建查询结构
             var queryStruct = new Zondy.Service.QueryFeatureStruct(
@@ -65,7 +69,7 @@
 //            传入OpenLayer的点的坐标
             pointObj.setByOL(feature.geometry);
 
-//            在点击下一个点时清除之前的点
+//            在点击下一个点时清除之前的点1
             feature.destroy();
 //            创建查询参数
             var queryParm = new Zondy.Service.QueryParameter(
@@ -93,10 +97,32 @@
             }
 
         }
+        function initHighLtLayer() {
+            highltLayer = new OpenLayers.Layer.Vector("Highlight");
+            map.addLayer(highltLayer);
+
+
+        }
 
         function onSuccess(data) {
             var formatData = JSON.stringify(data);
             Process(formatData, 1, "resultTable");
+//            如果存在已经高亮的图层则销毁,通过initHighLtLayer()重建要高亮显示的新图层
+            if(highltLayer) {
+                highltLayer.destroy();
+            }
+
+            //初始化高亮图层
+            initHighLtLayer();
+
+            var format = new Zondy.Format.PolygonJSON();
+            var features = format.read(data);
+
+            highltLayer.setVisibility(true);
+            highltLayer.addFeatures(features);
+
+
+
         }
 
 
