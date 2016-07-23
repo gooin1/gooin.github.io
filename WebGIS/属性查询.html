@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Title</title>
+
+    <link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+
+    <script src="../libs/jquery-1.7.1.min.js" type="text/javascript"></script>
+    <script src="../libs/OpenLayers.js" type="text/javascript"></script>
+    <script src="../libs/zdclient.js" type="text/javascript"></script>
+    <script src="../libs/jsonformat/json2.js" type="text/javascript"></script>
+    <script src="../libs/jsonformat/jsonExtend.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map, layer;
+
+        function init() {
+            map = new OpenLayers.Map("map1", {
+                controls: [
+                    new OpenLayers.Control.MousePosition(),
+                    new OpenLayers.Control.LayerSwitcher(),
+                    new OpenLayers.Control.Navigation()
+                ]
+            });
+
+            layer =new Zondy.Map.Doc("mdzz","WorldMKT",{
+                ip:"127.0.0.1",
+                port:"6163",
+                isBaseLayer:true
+            });
+            map.addLayer(layer);
+            map.setCenter(new OpenLayers.LonLat(11544046, 4312771),3);
+        }
+
+        function queryByAttribute() {
+//            初始化查询结构对象
+            var queryStruct = new Zondy.Service.QueryFeatureStruct();
+            queryStruct.IncludeGeometry = true;
+
+//            实例化查询参数对象
+            var queryParm = new Zondy.Service.QueryParameter(
+                    {
+                        resultFormat:"json",
+                        struct:queryStruct
+                    }
+            );
+//            设置属性条件
+            queryParm.where = "CNTRY_NAME='CHINA'";
+
+//            创建查询服务
+            var queryService=new Zondy.Service.QueryDocFeature(queryParm,"WorldMKT",1,{
+                ip:'127.0.0.1',
+                port:'6163'
+            });
+//            查询成功后回调函数
+            queryService.query(onSuccess);
+        }
+        function onSuccess(data) {
+            var formatData = JSON.stringify(data);
+            Process(formatData, 2, "resultTable");
+
+        }
+
+
+    </script>
+
+</head>
+<body onload="init()">
+<div class="ToolLib">
+    <input type="button" class="ButtonLib" value="属性查询" onclick="queryByAttribute()"/>
+
+</div>
+
+<div id="map1"></div>
+
+
+<aside id="resultTable">
+
+</aside>
+
+</body>
+</html>

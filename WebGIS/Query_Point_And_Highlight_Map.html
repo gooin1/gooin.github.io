@@ -14,9 +14,10 @@
 
     <script type="text/javascript">
         var map, layer;
-        var drawLayer = null;
+        var drawLayer = null;//定义高亮的图层
 
         function init() {
+//            添加地图容器
             map = new OpenLayers.Map('map1',
                     {
                         controls: [
@@ -28,6 +29,7 @@
                     }
             );
 
+//            添加图层
             layer = new Zondy.Map.Doc('MDZZ', 'WorldMKT', {
                 ip: "127.0.0.1",
                 port: '6163',
