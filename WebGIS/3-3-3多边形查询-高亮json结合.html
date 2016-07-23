@@ -12,7 +12,7 @@
     <script src="../libs/jsonformat/jsonExtend.js" type="text/javascript"></script>
     <script type="text/javascript">
         var map, layer;
-
+        var drawLayer;
 
         function init() {
 //            添加地图容器
@@ -35,6 +35,11 @@
             map.setCenter(new OpenLayers.LonLat(11544046, 4312771), 3);
         }
 
+        //        初始化要高亮的图层
+        function initDrawLayer() {
+            drawLayer = new OpenLayers.Layer.Vector("Highlight");
+            map.addLayer(drawLayer);
+        }
 
 
 
@@ -82,10 +87,24 @@
 
             function onSuccess(data) {
 
-            var formatData = JSON.stringify(data);
-            Process(formatData, 2, "resultTable")
+                var formatData = JSON.stringify(data);
+                Process(formatData, 2, "resultTable");
 
-        }
+                //初始化高亮图层
+                initDrawLayer();
+
+                //            新建对象存储要读取的数据
+                var format = new Zondy.Format.PolygonJSON();
+//                读取查询到的数据并添加到要素中
+                var features = format.read(data);
+//              将高粱图层设为可见
+                drawLayer.setVisibility(true);
+//                向图层添加查询到的要素
+                drawLayer.addFeatures(features);
+
+
+
+            }
 
 
     </script>

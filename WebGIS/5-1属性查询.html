@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <title>Title</title>
+
     <link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+
     <script src="../libs/jquery-1.7.1.min.js" type="text/javascript"></script>
     <script src="../libs/OpenLayers.js" type="text/javascript"></script>
     <script src="../libs/zdclient.js" type="text/javascript"></script>
@@ -30,43 +33,56 @@
             map.setCenter(new OpenLayers.LonLat(11544046, 4312771),3);
         }
 
-        function queryByOID() {
+        function queryByAttribute() {
+//            初始化查询结构对象
             var queryStruct = new Zondy.Service.QueryFeatureStruct();
             queryStruct.IncludeGeometry = true;
 
             /*OID查询*/
-            var oIds = "10,11";
 
-            var queryParm = new Zondy.Service.QueryParameter({
-                objectIds: oIds,//传入OID
-                resultFormat: "json",
-                struct: queryStruct
-            });
 
-            queryParm.recordNumber=1000;
-            var queryService = new Zondy.Service.QueryDocFeature(queryParm, "WorldMKT", 1, {
-                ip: "127.0.0.1",
-                port: "6163"
+
+
+//            实例化查询参数对象
+            var queryParm = new Zondy.Service.QueryParameter(
+                    {
+                        resultFormat:"json",
+                        struct:queryStruct
+                    }
+            );
+//            设置属性条件
+            queryParm.where = "CNTRY_NAME='CHINA'";
+
+//            创建查询服务
+            var queryService=new Zondy.Service.QueryDocFeature(queryParm,"WorldMKT",1,{
+                ip:'127.0.0.1',
+                port:'6163'
             });
-//            alert("mdzz");
+//            查询成功后回调函数
             queryService.query(onSuccess);
         }
         function onSuccess(data) {
-
             var formatData = JSON.stringify(data);
-            Process(formatData, 2, "resultTable")
+            Process(formatData, 2, "resultTable");
 
         }
 
 
     </script>
+
 </head>
 <body onload="init()">
-<div>
-    <input type="button" class="ButtonLib" value="OID查询" onclick="queryByOID()"/>
+<div class="ToolLib">
+    <input type="button" class="ButtonLib" value="属性查询" onclick="queryByAttribute()"/>
+
 </div>
+
 <div id="map1"></div>
-<aside id="resultTable"></aside>
+
+
+<aside id="resultTable">
+
+</aside>
 
 </body>
 </html>

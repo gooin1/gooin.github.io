@@ -105,8 +105,7 @@
             if (drawControl) {
 //                激活绘图控件
                 drawControl.activate();
-                drawControl.handler.setOptions({sides: 4});
-
+                drawControl.handler.setOptions({sides: 4});//设置绘制4边形
 
             }
 
@@ -122,8 +121,6 @@
             }
 
 
-
-
             //初始化高亮图层
             initHighLtLayer();
 //            高亮显示
@@ -131,8 +128,6 @@
             var features = format.read(data);
             highLtLayer.setVisibility(true);//将图层设为可见
             highLtLayer.addFeatures(features);//将要素添加到图层中
-
-
 
         }
 
