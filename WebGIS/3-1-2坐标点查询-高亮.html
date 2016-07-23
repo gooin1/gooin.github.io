@@ -13,11 +13,41 @@
 
 
     <script type="text/javascript">
+        var map, layer;
+        var drawLayer = null;//定义高亮的图层
+
+        function init() {
+//            添加地图容器
+            map = new OpenLayers.Map('map1',
+                    {
+                        controls: [
+                            new OpenLayers.Control.PanZoomBar(),
+                            new OpenLayers.Control.LayerSwitcher(),
+                            new OpenLayers.Control.Navigation(),
+                            new OpenLayers.Control.MousePosition()
+                        ]
+                    }
+            );
+
+//            添加图层
+            layer = new Zondy.Map.Doc('MDZZ', 'WorldMKT', {
+                ip: "127.0.0.1",
+                port: '6163',
+                isBaseLayer: true
+            });
+            map.addLayers([layer]);
+            map.setCenter(new OpenLayers.LonLat(11544046, 4312771), 3);
+        }
+
+        //        初始化要高亮的图层
+        function initDrawLayer() {
+            drawLayer = new OpenLayers.Layer.Vector("Highlight");
+            map.addLayer(drawLayer);
+        }
 
 
 
-
-        function QueryByPNt() {
+        function QueryByPNT() {
 
             //创建查询结构
             var queryStruct = new Zondy.Service.QueryFeatureStruct(
@@ -59,8 +89,18 @@
             queryService.query(querySuccess);
 
             function querySuccess(result) {
-                var FormatData = JSON.stringify(result);
-                Process(FormatData, 1, "resultTable"/*存放查询结果id位置*/);
+
+                //初始化高亮图层
+                initDrawLayer();
+
+                //            新建对象存储要读取的数据
+                var format = new Zondy.Format.PolygonJSON();
+//                读取查询到的数据并添加到要素中
+                var features = format.read(result);
+//              将高粱图层设为可见
+                drawLayer.setVisibility(true);
+//                向图层添加查询到的要素
+                drawLayer.addFeatures(features);
 
             }
 
@@ -71,14 +111,10 @@
 </head>
 <body onload="init()"  >
 <div class="ToolLib">
-    <input type="button" class="ButtonLib" value="point" onclick="QueryByPNt()"/>
-    <!--<input type="button" class="ButtonLib" value="draw Polygon" onclick="PaintPolygon()"/>-->
-    <!--<input type="button" class="ButtonLib" value="clear all graphics" onclick="clearGraphics()"/>-->
-
-    <!--<p><b>Warning:</b> You must click "clear all graphics" button before create new elements! </p>-->
-
-
+    <input type="button" class="ButtonLib" value="point" onclick="QueryByPNT()"/>
 </div>
+
+<div id="map1"></div>
 
 <div id="resultTable"></div>
 

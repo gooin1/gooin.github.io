@@ -80,7 +80,7 @@
 //            创建被查询对象
             var queryService = new Zondy.Service.QueryDocFeature(
                     queryParm/*调用查询参数函数*/,
-                    "WorldMKT", 1/*查询图层*/,
+                    "WorldMKT", 1/*查询图层索引号*/,
                     {
                         ip: "127.0.0.1",
                         port: "6163"
@@ -99,10 +99,13 @@
             //初始化高亮图层
             initDrawLayer();
 
+//            新建对象存储要读取的数据
             var format = new Zondy.Format.PolygonJSON();
+ //                读取查询到的数据并添加到要素中
             var features = format.read(result);
-
+//              将高粱图层设为可见
             drawLayer.setVisibility(true);
+//                向图层添加查询到的要素
             drawLayer.addFeatures(features);
 
         }
