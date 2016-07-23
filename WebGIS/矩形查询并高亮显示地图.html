@@ -47,7 +47,8 @@
             drawLayer = new OpenLayers.Layer.Vector("DrawLayer");
             map.addLayer(drawLayer);
 //          创建并添加控件  点
-            drawControl = new OpenLayers.Control.DrawFeature(drawLayer, OpenLayers.Handler.Point);
+            drawControl = new OpenLayers.Control.DrawFeature(drawLayer, OpenLayers.Handler.RegularPolygon);
+
             drawControl.featureAdded = callBack;
             map.addControl(drawControl);
         }
@@ -64,22 +65,27 @@
             var queryStruct = new Zondy.Service.QueryFeatureStruct(
                     {
 //                        要查询的信息
-                        IncludeGeometry: true,
-                        IncludeAttribute: true,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                IncludeGeometry: true,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                IncludeAttribute: true,
                         IncludeGraphic: true
                     }
             );
 //          	创建查询形状
-            var pointObj = new Zondy.Object.PointForQuery();
-//            传入OpenLayer的点的坐标
-            pointObj.setByOL(feature.geometry);
+//            var pointObj = new Zondy.Object.PointForQuery();
+////            传入OpenLayer的点的坐标
+//            pointObj.setByOL(feature.geometry);
+
+
+            var polygonObj = new Zondy.Object.Polygon();
+            polygonObj.setByOL(feature.geometry);
 
 //            在点击下一个点时清除之前的点
             feature.destroy();
 //            创建查询参数
             var queryParm = new Zondy.Service.QueryParameter(
                     {
-                        geometry:pointObj,
+                        geometry:polygonObj,
+
                         resultFormat:"json",
                         struct:queryStruct
                     });
@@ -97,8 +103,11 @@
 
         function startQuery() {
             if (drawControl) {
-
+//                激活绘图控件
                 drawControl.activate();
+                drawControl.handler.setOptions({sides: 4});
+
+
             }
 
         }
