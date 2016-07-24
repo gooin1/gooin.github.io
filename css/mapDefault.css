@@ -1,6 +1,6 @@
-body {
+/*body {*/
 
-    background-color: #efefef;}
+    /*background-color: #efefef;}*/
 
 aside {
     width: 25%;
@@ -23,9 +23,6 @@ aside {
 
 
 
-.ToolLib {
-
-}
 
 .ButtonLib {
 
@@ -45,28 +42,6 @@ aside {
     background-color: #1c94c4;
     color: #fff;
     cursor: pointer;
-}
-
-body {
-
-}
-
-h1 {
-    color: darkcyan;
-}
-
-p {
-    color: #06b6ef;
-
-}
-b {
-    background:#b36539;
-    color: yellow;
-
-}
-
-p:hover {
-    color: #007ACC;
 }
 
 
