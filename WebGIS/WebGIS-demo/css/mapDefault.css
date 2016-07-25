@@ -1,0 +1,73 @@
+body {
+
+    background-color: #efefef;}
+
+aside {
+
+    float: left;
+    border: 2px double #1c94c4;
+    margin: 10px 10px 10px 10px;
+    padding: 0px 10px 0px 10px;
+
+}
+
+#map1 {
+    float: left;
+    margin: 10px 10px 10px 10px;
+    overflow: hidden;
+
+    width: 750px;
+    height: 750px;
+    border-right: 1px solid #eeeeee;
+    font-family: "微软雅黑";
+}
+
+
+
+.ToolLib {
+
+}
+
+.ButtonLib {
+    margin: 10px auto 10px auto;
+    background-color:#1d75b3;
+    color: #fcf8e3;
+    border-radius: 8px;
+    border: none;
+    padding: 8px 10px;
+    font-family: 'Oswald', 'Futura', sans-serif;
+    font-size: 18px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.ButtonLib:hover, a.add:hover, a.show:hover {
+
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
+}
+
+body {
+
+}
+
+h1 {
+    color: darkcyan;
+}
+
+p {
+    color: #06b6ef;
+
+}
+b {
+    background:#b36539;
+    color: yellow;
+
+}
+
+p:hover {
+    color: #007ACC;
+}
+
+

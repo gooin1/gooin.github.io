@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../css/mapDefault.css" type="text/css" rel="stylesheet">
+    <script src="../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../libs/OpenLayers.js" type="text/javascript"></script>
+    <script src="../libs/zdclient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map, layer;
+        function init() {
+            map = new OpenLayers.Map("map1", {
+                controls: [
+                    new OpenLayers.Control.MousePosition(),
+                    new OpenLayers.Control.LayerSwitcher(),
+                    new OpenLayers.Control.Navigation()
+                ]
+            });
+            layer = new Zondy.Map.Layer("MDZZ", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/主要城市"],
+                    {
+                        ip: "127.0.0.1",
+                        port: "6163",
+                        isBaseLayer: true
+                    });
+            map.addLayer(layer);
+            map.setCenter(new OpenLayers.LonLat(0, 0), 1);
+        }
+
+        function delPoint() {
+            var
+
+        }
+
+
+
+    </script>
+
+
+</head>
+<body onload="init()">
+<div>
+    <input type="button" class="ButtonLib" value="坐标添加点" onclick="delPoint()">
+</div>
+
+
+<div id="map1"></div>
+<aside id="resultTable"></aside>
+</body>00
+</html>
