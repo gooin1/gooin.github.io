@@ -1,0 +1,380 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8">
+    <title>点查询</title>
+
+    <script src="../libs/OpenLayers.js" type="text/javascript"></script>
+
+    <script src="../libs/jquery-1.7.1.min.js" type="text/javascript"></script>
+
+    <script src="../libs/zdclient.js" type="text/javascript"></script>
+
+    <link href="../Styles/style.css" rel="stylesheet" type="text/css" />
+
+    <script src="../libs/plugins/ligerUI/js/ligerui.min.js" type="text/javascript"></script>
+
+    <link href="../libs/plugins/ligerUI/skins/Silvery/css/ligerui-all.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript">
+
+        var map, layer;             //地图容器与地图文档对象
+
+        var geomLayer = null;       //绘图图层
+
+        var drawControl = null;     //绘图控件
+
+        var grid = null;            //查询结果表格控件
+
+        var gridManager = null;     //查询结果表格控件管理对象
+
+        var CustomersData = null;   //查询结果对象
+
+
+
+        //地图初始化函数
+
+        function init() {
+
+            //初始化地图容器
+
+            map = new OpenLayers.Map('map1', {
+
+                numZoomLevels: 16,
+
+                maxExtent: new OpenLayers.Bounds(-180, -90, 180, 90),
+
+                maxResolution: 0.3515625,
+
+                controls: [
+
+                    new OpenLayers.Control.Navigation(),
+
+                    new OpenLayers.Control.PanZoomBar(),
+
+                    new OpenLayers.Control.LayerSwitcher()
+
+                ]
+
+            });
+
+
+
+            //初始化地图文档图层对象
+
+            layer = new Zondy.Map.Doc("MapGIS MapDocLayer", "WorldMKT", {
+
+                ip: "127.0.0.1",
+
+                singleTile: true,
+
+                transitionEffect: "resize"
+
+            });
+
+            //创建绘图层
+
+            geomLayer = new OpenLayers.Layer.Vector("geomLayer");
+
+
+
+            //将地图文档图层、绘图层和闪烁图层加载到地图中
+
+            map.addLayers([layer, geomLayer]);
+
+            //设置地图的初始化显示中心和级别
+
+            map.setCenter(new OpenLayers.LonLat(0, 0), 2);
+
+
+
+            //创建画点控件并添加在地图容器中，指定控件的回调函数featureAdded
+
+            drawControl = new OpenLayers.Control.DrawFeature(geomLayer, OpenLayers.Handler.Point);
+
+            drawControl.featureAdded = queryCallBack;                   //点击查询的回调函数
+
+            map.addControl(drawControl);
+
+        }
+
+
+
+        //接收点对象，读取对象几何信息和调用Zondy的查询服务
+
+        function queryCallBack(feature) {
+
+            //初始化几何点对象
+
+            var geomObj = new Zondy.Object.PointForQuery();
+
+            //接收客户端绘制的几何点对象
+
+            geomObj.setByOL(feature.geometry);
+
+            geomObj.nearDis = 0.1;
+
+            feature.destroy();
+
+
+
+            //初始化查询结构对象，设置查询结构包含几何信息
+
+            var queryStruct = new Zondy.Service.QueryFeatureStruct();
+
+            queryStruct.IncludeGeometry = true;
+
+            //实例化查询参数对象
+
+            var queryParam = new Zondy.Service.QueryParameter({
+
+                geometry: geomObj,
+
+                resultFormat: "json",
+
+                struct: queryStruct
+
+            });
+
+            //设置查询要素数目
+
+            queryParam.recordNumber = 1000;
+
+            //实例化地图文档查询服务对象
+
+            var queryService = new Zondy.Service.QueryDocFeature(queryParam, "WorldMTK", 1, {
+
+                ip: "127.0.0.1"
+
+            });
+
+            //执行查询操作，querySuccess为查询回调函数
+
+            queryService.query(querySuccess);
+
+        }
+
+
+
+        //获取查询结果（要素数组），并以动态表格形式展示每个要素信息
+
+        function querySuccess(data) {
+
+            var a = data;
+
+            if (a.SFEleArray.length == 0) {
+
+                alert("查询结果为空");
+
+            }
+
+            else {
+
+                queryResult(a, flashLayer);
+
+            }
+
+        }
+
+
+
+        //将查询返回的json对象在表格中显示
+
+        function queryResult(a, m_layer) {
+
+            if (a == null || a.SFEleArray == null || a.SFEleArray.length <= 0) {
+
+                return;
+
+            }
+
+
+
+            var strjson = new Array(a.SFEleArray.length);
+
+            for (i = 0; i < a.SFEleArray.length; i++) {
+
+                strjson[i] = {};
+
+                for (k = 0; k <= a.AttStruct.FldName.length; k++) {
+
+                    if (k == 0) {
+
+                        strjson[i]["FID"] = a.SFEleArray[i].FID;
+
+                    } else {
+
+                        strjson[i][a.AttStruct.FldName[k - 1]] = a.SFEleArray[i].AttValue[k - 1];
+
+                    }
+
+                }
+
+            }
+
+
+
+            //格式化后的JSON数据
+
+            CustomersData = {
+
+                Rows: strjson,
+
+                Total: a.SFEleArray.length
+
+            };
+
+            //设置要在表格显示的数据对象
+
+            var filedStr = new Array(a.AttStruct.FldName.length - 1);
+
+            for (var k = 0; k <= a.AttStruct.FldName.length; k++) {
+
+                filedStr[k] = {};
+
+            }
+
+            for (var m = 0; m <= a.AttStruct.FldName.length; m++) {
+
+                if (m == 0) {
+
+                    filedStr[m]["display"] = "FID";
+
+                    filedStr[m]["name"] = "FID";
+
+                } else {
+
+                    filedStr[m]["display"] = a.AttStruct.FldName[m - 1];
+
+                    filedStr[m]["name"] = a.AttStruct.FldName[m - 1];
+
+                    filedStr[m]["editor"] = "text";
+
+                }
+
+                filedStr[m]["align"] = "center";
+
+                filedStr[m]["width"] = 80;
+
+            }
+
+            //将查询结果记录装载到表格中显示
+
+            if (grid != null) {
+
+                gridManager = $("#tab").ligerGetGridManager();
+
+                gridManager.setOptions({
+
+                    columns: filedStr
+
+                });
+
+                gridManager.setOptions({
+
+                    data: CustomersData
+
+                });
+
+                gridManager.loadData();
+
+                return;
+
+            }
+
+            //初始化查询结果表格控件
+
+            grid = $("#tab").ligerGrid({
+
+                columns: filedStr,                  //列
+
+                data: CustomersData,                //表格数据
+
+                sortName: a.AttStruct.FldName,      //列名
+
+                width: "45%",
+
+                height: '448px',
+
+                pageSize: 15,                       //每页默认的结果数
+
+                pageSizeOptions: [15, 20, 25, 30]  //可选择设定的每页结果数
+
+            });
+
+        }
+
+
+
+        //激活查询控件，可实施点击查询
+
+        function query() {
+
+            if (drawControl) {
+
+                drawControl.activate();
+
+            }
+
+        }
+
+        //注销查询控件
+
+        function stopQuery() {
+
+            if (drawControl) {
+
+                drawControl.deactivate();
+
+            }
+
+        }
+
+    </script>
+
+
+
+</head>
+
+<body onload="init()">
+
+<div id="header">
+
+    <span id="title">MapGIS IGS PointQuery Example</span>
+
+    <span id="shortdesc">地图几何查询功能（点查询）</span>
+
+</div>
+
+<table>
+
+    <tr id="contenttable">
+
+        <td id="mapCon" style="width: 1020px;">
+
+            <div id="map1" style = "background-image:url('../libs/theme/img/mapgis1.jpg');"></div>
+
+            <br />
+
+            <div id="tab" class="tab"></div>
+
+            <div id="clear" class="clear"></div>
+
+            <div id="btn">
+
+                <input type="button" id="stopQueryBtn"  value="停止查询" onclick="stopQuery()"/>
+
+                <input type="button" id="queryBtn"      value="点击查询" onclick="query()"/>
+
+            </div>
+
+        </td>
+
+    </tr>
+
+</table>
+
+</body>
+
+</html>
+

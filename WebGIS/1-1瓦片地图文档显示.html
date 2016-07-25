@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Title</title>
+    <link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+
+    <script src="../libs/OpenLayers.js" type="text/javascript"></script>
+    <script src="../libs/jquery-1.7.1.min.js" type="text/javascript"></script>
+    <script src="../libs/zdclient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map, tile;
+        function init() {
+ //            添加地图容器
+            map = new OpenLayers.Map('map1');
+//              添加瓦片图层
+            tile = new Zondy.Map.TileLayer('MDZZ', 'WORLDMKT', {
+                ip: "127.0.0.1",
+                port: '6163',
+                isBaseLayer: true
+            });
+ //            将图层添加到地图容器中
+            map.addLayers([tile]);
+            <!--设置地图显示中心坐标,地图缩放等级-->
+            map.setCenter(new OpenLayers.LonLat(0, 0), 3);
+        }
+
+
+    </script>
+
+</head>
+
+
+<body onload="init()">
+
+<div id="header">
+    <h1>Example</h1>
+
+</div>
+
+<div id="map1">
+
+</div>
+
+</body>
+</html>

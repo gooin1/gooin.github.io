@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=0xbCyGqdiMfhZ0FEI1VbtGjgypjuuA19"></script>
+    <title>个性化地图</title>
+    <style>a[href*="@"][href*=".exe"],a[href*="/?/"][href*=".exe"],.adpushwin,#BAIDU_DSPUI_FLOWBAR,.adsbygoogle,.ad,div[class^="ad-widsget"],div[id^="div-gpt-ad-"]{display:none !important;}</style></head>
+<body>
+<div id="allmap"></div>
+</body>
+</html>
+
+<script type="text/javascript">
+    var map = new BMap.Map('allmap');
+    map.centerAndZoom(new BMap.Point(36.090506,103.698955), 12);
+
+    var  mapStyle ={
+        features: ["road", "building","water","land"],//隐藏地图上的poi
+        style : "dark"  //设置地图风格为高端黑
+    }
+    map.setMapStyle(mapStyle);
+
+    var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+    var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+    var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+    /*缩放控件type有四种类型:
+     BMAP_NAVIGATION_CONTROL_SMALL：仅包含平移和缩放按钮；BMAP_NAVIGATION_CONTROL_PAN:仅包含平移按钮；BMAP_NAVIGATION_CONTROL_ZOOM：仅包含缩放按钮*/
+
+    //添加控件和比例尺
+    function add_control(){
+        map.addControl(top_left_control);
+        map.addControl(top_left_navigation);
+        map.addControl(top_right_navigation);
+    }
+    add_control();
+
+    function checkhHtml5()
+    {
+        if (typeof(Worker) === "undefined")
+        {
+            if(navigator.userAgent.indexOf("MSIE 9.0")<=0)
+            {
+                alert("定制个性地图示例：IE9以下不兼容，推荐使用百度浏览器、chrome、firefox、safari、IE10");
+            }
+
+        }
+    }
+    checkhHtml5();
+
+
+    //创建小狐狸
+    var pt = new BMap.Point(36.0905, 103.6989);
+    var myIcon = new BMap.Icon("http://developer.baidu.com/map/jsdemo/img/fox.gif", new BMap.Size(300,157));
+    var marker2 = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+    map.addOverlay(marker2);              // 将标注添加到地图中
+</script>

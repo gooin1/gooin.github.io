@@ -23,11 +23,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>Material Design Lite</title>
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="material.light_blue-pink.min.css" />
+    <link rel="stylesheet" href="mdl-template-dashboard-styles.css">
+    <style>
+      #view-source {
+        position: fixed;
+        display: block;
+        right: 0;
+        bottom: 0;
+        margin-right: 40px;
+        margin-bottom: 40px;
+        z-index: 900;
+      }
+    </style>
 
-    <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
-    <!--
-    <link rel="canonical" href="http://www.example.com/">
-    -->
     <link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
     <script src="../libs/jquery-1.7.1.min.js" type="text/javascript"></script>
     <script src="../libs/OpenLayers.js" type="text/javascript"></script>
@@ -162,27 +173,12 @@
 
     </script>
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="material.light_blue-pink.min.css" />
-    <link rel="stylesheet" href="mdl-template-dashboard-styles.css">
-    <style>
-    #view-source {
-      position: fixed;
-      display: block;
-      right: 0;
-      bottom: 0;
-      margin-right: 40px;
-      margin-bottom: 40px;
-      z-index: 900;
-    }
-    </style>
   </head>
   <body onload="init()">
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
-          <span class="mdl-layout-title">ShowMapDemoHome</span>
+          <span class="mdl-layout-title">ShowMapDemo</span>
           <div class="mdl-layout-spacer"></div>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable">
             <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
@@ -282,6 +278,7 @@
             </div>
             <!--2-->
             <div  class="demo-separator mdl-cell--1-col"></div>
+
             <div id="resultTable" class="demo-options mdl-card mdl-color--blue-grey-900 mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--3-col-tablet mdl-cell--12-col-desktop">
               <!--<div class="mdl-card__supporting-text mdl-color-text&#45;&#45;blue-grey-50">-->
                 <!--<h3>View options</h3>-->

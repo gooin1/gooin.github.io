@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+
+    <script src="../libs/jquery-1.7.1.min.js" type="text/javascript"></script>
+    <script src="../libs/OpenLayers.js" type="text/javascript"></script>
+    <script src="../libs/zdclient.js" type="text/javascript"></script>
+    <script src="../libs/jsonformat/json2.js" type="text/javascript"></script>
+    <script src="../libs/jsonformat/jsonExtend.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map;
+        var layer;
+        var drawLayer;
+        var drawControl;
+        var highLtLayer;
+
+        var grid = null;            //查询结果表格控件
+
+        var gridManager = null;     //查询结果表格控件管理对象
+
+        var CustomersData = null;   //查询结果对象
+
+        function init() {
+//            创建地图容器
+            map = new OpenLayers.Map("map1", {
+//            添加控件
+                controls: [
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.MousePosition(),
+                    new OpenLayers.Control.LayerSwitcher(),
+                    new OpenLayers.Control.OverviewMap()
+                ]
+            });
+
+            layer = new Zondy.Map.Doc("BaseLayer", "WorldMKT", {
+                ip: "127.0.0.1",
+                port: "6163",
+                isBaseLayer: true
+            });
+//          添加图层
+            map.addLayers([layer]);
+//            设置显示中心和级别
+            map.setCenter(new OpenLayers.LonLat(11544046, 4312771), 3);
+            initDraw();
+        }
+
+
+        function initDraw() {
+//            添加一个绘制图层
+            drawLayer = new OpenLayers.Layer.Vector("DrawLayer");
+            map.addLayer(drawLayer);
+//          创建并添加控件  点
+            drawControl = new OpenLayers.Control.DrawFeature(drawLayer, OpenLayers.Handler.RegularPolygon);
+
+            drawControl.featureAdded = callBack;
+            map.addControl(drawControl);
+        }
+        function initHighLtLayer() {
+//            添加一个用于高亮显示的图层
+            highLtLayer = new OpenLayers.Layer.Vector("Highlight");
+            map.addLayer(highLtLayer);
+        }
+
+
+
+        function callBack(feature) {
+//            创建查询结构
+            var queryStruct = new Zondy.Service.QueryFeatureStruct(
+                    {
+//                        要查询的信息
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                IncludeGeometry: true,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                IncludeAttribute: true,
+                        IncludeGraphic: true
+                    }
+            );
+//          	创建查询形状
+//            var pointObj = new Zondy.Object.PointForQuery();
+////            传入OpenLayer的点的坐标
+//            pointObj.setByOL(feature.geometry);
+
+
+            var polygonObj = new Zondy.Object.Polygon();
+            polygonObj.setByOL(feature.geometry);
+
+//            在点击下一个点时清除之前的点
+            feature.destroy();
+//            创建查询参数
+            var queryParm = new Zondy.Service.QueryParameter(
+                    {
+                        geometry:polygonObj,
+
+                        resultFormat:"json",
+                        struct:queryStruct
+                    });
+//            创建查询服务
+            var queryService =new Zondy.Service.QueryDocFeature(queryParm,"WorldMKT",1,{
+                ip:"127.0.0.1",
+                port:"6163"
+            });
+
+
+            queryService.query(onSuccess);
+
+        }
+
+
+        function startQuery() {
+            if (drawControl) {
+//                激活绘图控件
+                drawControl.activate();
+                drawControl.handler.setOptions({sides: 4});//设置绘制4边形
+
+            }
+
+        }
+
+
+        function onSuccess(data) {
+            var formatData = JSON.stringify(data);
+            Process(formatData, 1, "resultTable");
+//            如果存在已经高亮的图层则销毁,通过initHighLtLayer()重建要高亮显示的新图层
+            if(highLtLayer) {
+                highLtLayer.destroy();
+            }
+
+            //初始化高亮图层
+            initHighLtLayer();
+//            高亮显示
+            var format = new Zondy.Format.PolygonJSON();
+            var features = format.read(data);
+            highLtLayer.setVisibility(true);//将图层设为可见
+            highLtLayer.addFeatures(features);//将要素添加到图层中
+
+
+            //表格test
+            var a = data;
+
+            if (a.SFEleArray.length == 0) {
+
+                alert("查询结果为空");
+
+            }
+
+            else {
+
+                queryResult(a, flashLayer);
+
+            }
+
+        }
+
+
+
+        //将查询返回的json对象在表格中显示
+
+        function queryResult(a, m_layer) {
+
+            if (a == null || a.SFEleArray == null || a.SFEleArray.length <= 0) {
+
+                return;
+
+            }
+
+
+
+            var strjson = new Array(a.SFEleArray.length);
+
+            for (i = 0; i < a.SFEleArray.length; i++) {
+
+                strjson[i] = {};
+
+                for (k = 0; k <= a.AttStruct.FldName.length; k++) {
+
+                    if (k == 0) {
+
+                        strjson[i]["FID"] = a.SFEleArray[i].FID;
+
+                    } else {
+
+                        strjson[i][a.AttStruct.FldName[k - 1]] = a.SFEleArray[i].AttValue[k - 1];
+
+                    }
+
+                }
+
+            }
+
+
+
+            //格式化后的JSON数据
+
+            CustomersData = {
+
+                Rows: strjson,
+
+                Total: a.SFEleArray.length
+
+            };
+
+            //设置要在表格显示的数据对象
+
+            var filedStr = new Array(a.AttStruct.FldName.length - 1);
+
+            for (var k = 0; k <= a.AttStruct.FldName.length; k++) {
+
+                filedStr[k] = {};
+
+            }
+
+            for (var m = 0; m <= a.AttStruct.FldName.length; m++) {
+
+                if (m == 0) {
+
+                    filedStr[m]["display"] = "FID";
+
+                    filedStr[m]["name"] = "FID";
+
+                } else {
+
+                    filedStr[m]["display"] = a.AttStruct.FldName[m - 1];
+
+                    filedStr[m]["name"] = a.AttStruct.FldName[m - 1];
+
+                    filedStr[m]["editor"] = "text";
+
+                }
+
+                filedStr[m]["align"] = "center";
+
+                filedStr[m]["width"] = 80;
+
+            }
+
+            //将查询结果记录装载到表格中显示
+
+            if (grid != null) {
+
+                gridManager = $("#tab").ligerGetGridManager();
+
+                gridManager.setOptions({
+
+                    columns: filedStr
+
+                });
+
+                gridManager.setOptions({
+
+                    data: CustomersData
+
+                });
+
+                gridManager.loadData();
+
+                return;
+
+            }
+
+            //初始化查询结果表格控件
+
+            grid = $("#tab").ligerGrid({
+
+                columns: filedStr,                  //列
+
+                data: CustomersData,                //表格数据
+
+                sortName: a.AttStruct.FldName,      //列名
+
+                width: "45%",
+
+                height: '448px',
+
+                pageSize: 15,                       //每页默认的结果数
+
+                pageSizeOptions: [15, 20, 25, 30]  //可选择设定的每页结果数
+
+            });
+
+
+
+        }
+
+
+    </script>
+</head>
+<body onload="init()">
+<div class="ToolLib">
+    <input type="button" class="ButtonLib" value="开始查询" onclick="startQuery()"/>
+
+</div>
+
+<div id="map1"></div>
+
+<div id="tab" class="tab"></div>
+<div id="clear" class="clear"></div>
+
+<aside id="resultTable">
+
+</aside>
+
+</body>
+</html>
