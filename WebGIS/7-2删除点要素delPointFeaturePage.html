@@ -28,24 +28,32 @@
         }
 
         function delPoint() {
-            var featureIds=598;
-            var delService=new Zondy.Service.EditLayerFeature("gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/主要城市",{
-                ip:"127.0.0.1",
-                port:"6163"
+
+//            添加要删除的点的OID 数组形式删除一组点
+//            var featureIds=[599,600,601];
+
+//            添加要删除的点的OID 字符串形式删除一组点
+//            var featureIds="599,600,601";
+
+//            添加要删除的点的OID
+            var featureIds = 602;
+
+            var delService = new Zondy.Service.EditLayerFeature("gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/主要城市", {
+                ip: "127.0.0.1",
+                port: "6163"
             });
             delService.deletes(featureIds, onSuccess);
         }
 
         function onSuccess(result) {
-            if(result){
+            if (result) {
                 map.baseLayer.redraw(true);
                 alert("删除成功!");
-            }else{
+            } else {
                 alert("删除失败");
             }
 
         }
-
 
 
     </script>
@@ -60,5 +68,6 @@
 
 <div id="map1"></div>
 <aside id="resultTable"></aside>
-</body>00
+</body>
+00
 </html>
