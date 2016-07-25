@@ -45,7 +45,7 @@
             map.setCenter(new OpenLayers.LonLat(0, 0), 2);
 
         }
-        //创建一个矢量图层
+        //创建一个矢量图层用于交互式绘制
         function initDrawControl() {
 //            创建图层
             vecLayer = new OpenLayers.Layer.Vector("DrawLayer");
@@ -56,6 +56,7 @@
 //            将绘图工具添加到控件中
             map.addControl(drawControl);
         }
+//        开始绘制函数
         function StarDraw() {
             //如果绘图图层不存在
             if (vecLayer == null) {
@@ -84,8 +85,8 @@
 </head>
 <body onload="init()">
 <div  class="ToolLib"> 
-<input  type ="button" value="绘制几何图形" onclick="StarDraw()" />
-<input  type ="button" value="清除绘制" onclick="clearMap()" />
+<input  type ="button" class="ButtonLib" value="绘制几何图形" onclick="StarDraw()" />
+<input  type ="button" class="ButtonLib" value="清除绘制" onclick="clearMap()" />
   </div>
   <div id="map1"></div>
 </body>
