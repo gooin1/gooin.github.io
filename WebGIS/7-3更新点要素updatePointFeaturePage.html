@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+    <script src="../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../libs/OpenLayers.js" type="text/javascript"></script>
+    <script src="../libs/zdclient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map, layer;
+        function init() {
+            map = new OpenLayers.Map("map1", {
+                controls: [
+                    new OpenLayers.Control.MousePosition(),
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.LayerSwitcher()
+                ]
+            });
+            layer = new Zondy.Map.Layer("MDZZ", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/主要城市"],
+                    {
+                        ip: "127.0.0.1",
+                        port: "6163",
+                        isBaseLayer: true
+                    });
+            map.addLayer(layer);
+            map.setCenter(new OpenLayers.LonLat(0, 0), 2);
+        }
+
+        function updatePoint() {
+//          创建一个点形状
+            var gPoint = new Zondy.Object.GPoint(78, -35);
+//          设置点要素的几何信息
+            var fGeom = new Zondy.Object.FeatureGeometry({PntGeom: [gPoint]});
+
+//          设置点要素的符号参数信息
+            var pointInfo = new Zondy.Object.CPointInfo({
+                Angle: 0,
+                Color: 18,
+                Space: 0,//间距
+                SymHeight: 25,
+                SymWidth: 25,
+                SymID: 8
+            });
+
+//            设置点要素的图形参数信息
+            var webGraphicsInfo = new Zondy.Object.WebGraphicsInfo({
+                InfoType: 1,//图形参数为线类型
+                PntInfo: pointInfo
+            });
+
+//            设置属性结构
+            var attStruct = new Zondy.Object.CAttStruct({
+                FldName: ["Cname", "CNTRY_NAME", "NAME", "POPULATION"],
+                FldNumber: 4,
+                FldType: ["string", "string","NAME",  "double"]
+            });
+
+//            设置添加要素的属性
+            var attValue = ['兰州', 'CHINA111',"LanZhou" ,2.0];
+
+//            创建一个新要素
+            var newFeature = new Zondy.Object.Feature({
+                fGeom: fGeom,
+                GraphicInfo: webGraphicsInfo,
+                AttValue: attValue
+            });
+            newFeature.setFType(1);
+
+//           设置需要更新点的OID
+            newFeature.setFID(602);
+
+//           创建一个要素集
+            var featureSet = new Zondy.Object.FeatureSet();
+            featureSet.clear();
+
+            featureSet.AttStruct = attStruct;
+
+            featureSet.addFeature(newFeature);
+
+
+//            创建编辑服务类
+            var editService = new Zondy.Service.EditLayerFeature("gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/主要城市",
+                    {
+                        ip: "127.0.0.1",
+                        port: "6163"
+                    });
+            editService.update(featureSet,onSuccess);
+        }
+
+        function onSuccess(result) {
+            if (result) {
+                map.baseLayer.redraw(true);
+                alert("更新成功");
+            } else {
+                alert("更新失败");
+            }
+
+        }
+
+
+    </script>
+</head>
+
+
+<body onload="init()">
+<div>
+    <input type="button" class="ButtonLib" value="更新点信息" onclick="updatePoint()">
+</div>
+<div id="map1"></div>
+</body>
+</html>
