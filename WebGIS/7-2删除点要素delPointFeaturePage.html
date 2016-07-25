@@ -10,20 +10,26 @@
     <script type="text/javascript">
         var map, layer;
         function init() {
+            //            添加地图容器
             map = new OpenLayers.Map("map1", {
                 controls: [
-                    new OpenLayers.Control.MousePosition(),
-                    new OpenLayers.Control.LayerSwitcher(),
-                    new OpenLayers.Control.Navigation()
+                    new OpenLayers.Control.MousePosition(),//此控件显示鼠标移动时，所在点的地理坐标
+                    new OpenLayers.Control.LayerSwitcher(),//图层切换控件
+                    new OpenLayers.Control.Navigation()//此控件处理伴随鼠标事件的地图浏览
                 ]
             });
-            layer = new Zondy.Map.Layer("MDZZ", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/主要城市"],
+ //              添加矢量图层
+            layer = new Zondy.Map.Layer("MDZZ",
+//                    传入矢量地图的url参数
+                    ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/主要城市"],
                     {
-                        ip: "127.0.0.1",
-                        port: "6163",
-                        isBaseLayer: true
+                        ip: "127.0.0.1",//ip
+                        port: "6163",//端口
+                        isBaseLayer: true //设为基础图层 !此项不写地图无法加载
                     });
+ //            将图层添加到地图容器中
             map.addLayer(layer);
+            <!--设置地图显示中心坐标,地图缩放等级-->
             map.setCenter(new OpenLayers.LonLat(0, 0), 1);
         }
 
@@ -37,20 +43,22 @@
 
 //            添加要删除的点的OID
             var featureIds = 602;
-
+//            创建一个编辑服务类
             var delService = new Zondy.Service.EditLayerFeature("gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/主要城市", {
-                ip: "127.0.0.1",
-                port: "6163"
+                ip: "127.0.0.1",//服务器ip
+                port: "6163"    //端口
             });
+//          将要素集从图层中删除并执行回调函数
             delService.deletes(featureIds, onSuccess);
         }
 
         function onSuccess(result) {
+//            如果删除成功则返回结果
             if (result) {
                 map.baseLayer.redraw(true);
-                alert("删除成功!");
+                alert("删除成功!");//弹窗提示
             } else {
-                alert("删除失败");
+                alert("删除失败");//弹窗提示
             }
 
         }
