@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>添加点要素</title>
     <link href="../css/mapDefault.css" type="text/css" rel="stylesheet">
     <script src="../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
     <script src="../libs/OpenLayers.js" type="text/javascript"></script>
@@ -38,10 +38,10 @@
             var pointInfo = new Zondy.Object.CPointInfo({
                 Angle: 0, //旋转角度
                 Color: 23,//颜色
-                Space: 0,//
+                Space: 0,//间距
                 SymHeight: 12,//点的高度
                 SymWidth: 12,//点的宽度
-                SymID: 7     //id
+                SymID: 7     //符号id
             });
 //            设置当前点要素的图形参数
             var webGraphicInfo = new Zondy.Object.WebGraphicsInfo({
@@ -55,7 +55,7 @@
                 FldType: ["string", "string", "double"]
             });
 //            设置添加点要素的属性
-            var attValue = ['湖蓝', 'CHINA', '1.0'];
+            var attValue = ['湖蓝', 'CHINA', 1.0];
 //            创建点要素
             var feature = new Zondy.Object.Feature({
                 fGeom: fGeom,//几何信息
@@ -77,6 +77,7 @@
                         ip: "127.0.0.1",
                         port: "6163"
                     });
+
             editService.add(featureSet, onSuccess);
         }
         function onSuccess(result) {
@@ -91,7 +92,6 @@
 
 
     </script>
-
 
 </head>
 <body onload="init()">
