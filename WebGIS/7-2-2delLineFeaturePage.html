@@ -47,6 +47,7 @@
         function onSuccess(result) {
 //            如果删除成功则返回结果
             if (result) {
+//                刷新地图
                 map.baseLayer.redraw(true);
                 alert("删除成功!");//弹窗提示
             } else {

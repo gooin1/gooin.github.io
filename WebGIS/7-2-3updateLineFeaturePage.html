@@ -31,12 +31,33 @@
             <!--设置地图显示中心坐标,地图缩放等级-->
             map.setCenter(new OpenLayers.LonLat(0, 0), 2);
         }
+
+
+        //            获取随机点
+        function getPoint() {
+//            获取最大显示范围
+            var mapBound = map.getMaxExtent();
+//            获取地图容器的宽度
+            var width = mapBound.right - mapBound.left;
+//            获取地图容器的高度
+            var height = mapBound.top - mapBound.bottom;
+
+//            计算随机点的x坐标
+            pointX = Math.random() * width + mapBound.left;
+//            计算随机点的y坐标
+            pointY = Math.random() * height + mapBound.bottom;
+//            返回随机点
+            return  new Zondy.Object.Point2D(pointX,pointY);
+        }
+
+
+
         function addLineFeature() {
 //            创建一个数组用于存储点坐标
             var pntObj = new Array();
 //            传入点的坐标
-            pntObj[0]=new Zondy.Object.Point2D(50,20);
-            pntObj[1]=new Zondy.Object.Point2D(111,30);
+            pntObj[0] = getPoint();
+            pntObj[1] = getPoint();
 //            创建弧段
             <!--弧段由多个点构成, 两个点构成的弧段为直线-->
             var Arc = new Zondy.Object.Arc(pntObj);
@@ -47,7 +68,6 @@
             var gLine = new Zondy.Object.GLine(anyLine);
 //            设置线要素的几何信息
             var fGeom = new Zondy.Object.FeatureGeometry({LinGeom: [gLine]});
-
 
 
 //            描述线要素的符号参数信息
@@ -67,17 +87,15 @@
             });
 
 
-
 //            设置属性结构
-            var attStruct =new Zondy.Object.CAttStruct({
-                FldName:["ID","长度","NAME","SYSTEM","FID1","118645","CNAME"],//字段名称
-                FldNumber:7,                                                  //字段数量
-                FldType:["long","double","string","string","long","long","string"] // 字段类型
+            var attStruct = new Zondy.Object.CAttStruct({
+                FldName: ["ID", "长度", "NAME", "SYSTEM", "FID1", "118645", "CNAME"],//字段名称
+                FldNumber: 7,                                                  //字段数量
+                FldType: ["long", "double", "string", "string", "long", "long", "string"] // 字段类型
 
             });
 //            设置属性
-            var attValue =[111,111.0,'MDZZ','233',1,1,'黄河'];
-
+            var attValue = [111, 111.0, 'MDZZ', '233', 1, 1, '黄河'];
 
 
 //            创建要素
@@ -88,6 +106,8 @@
             });
 //          设置要素为点要素  1为点,2为线,3为区
             newFeature.setFType(2);
+
+
 //            设置要更新的线的OID
             newFeature.setFID(139);
 
@@ -98,7 +118,6 @@
             featureSet.AttStructt = attStruct;
 //            添加要素到数据集中
             featureSet.addFeature(newFeature);
-
 
 
 //            创建一个编辑服务类
@@ -113,11 +132,11 @@
 
         function onSuccess(result) {
 //            如果添加成功则返回结果
-            if(result){
+            if (result) {
 //                刷新地图
                 map.baseLayer.redraw(true);
                 alert("更新成功");//弹窗提示
-            }else{
+            } else {
                 alert("更新失败");//弹窗提示
             }
         }

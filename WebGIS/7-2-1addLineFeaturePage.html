@@ -31,12 +31,32 @@
             <!--设置地图显示中心坐标,地图缩放等级-->
             map.setCenter(new OpenLayers.LonLat(0, 0), 2);
         }
+
+
+        //            获取随机点
+        function getPoint() {
+//            获取最大显示范围
+            var mapBound = map.getMaxExtent();
+//            获取地图容器的宽度
+            var width = mapBound.right - mapBound.left;
+//            获取地图容器的高度
+            var height = mapBound.top - mapBound.bottom;
+
+//            计算随机点的x坐标
+            pointX = Math.random() * width + mapBound.left;
+//            计算随机点的y坐标
+            pointY = Math.random() * height + mapBound.bottom;
+//            返回随机点
+            return  new Zondy.Object.Point2D(pointX,pointY);
+        }
+
+
         function addLineFeature() {
 //            创建一个数组用于存储点坐标
             var pntObj = new Array();
 //            传入点的坐标
-            pntObj[0]=new Zondy.Object.Point2D(50,20);
-            pntObj[1]=new Zondy.Object.Point2D(111,30);
+            pntObj[0]=getPoint();
+            pntObj[1]=getPoint();
 //            创建弧段
             <!--弧段由多个点构成, 两个点构成的弧段为直线-->
             var Arc = new Zondy.Object.Arc(pntObj);
