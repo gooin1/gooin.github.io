@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <title>添加点要素</title>
+    <link href="../css/mapDefault.css" type="text/css" rel="stylesheet">
+    <script src="../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="../libs/OpenLayers.js" type="text/javascript"></script>
+    <script src="../libs/zdclient.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var map, layer;
+        function init() {
+//            添加地图容器
+            map = new OpenLayers.Map("map1", {
+                controls: [
+                    new OpenLayers.Control.MousePosition(),//显示鼠标所在点的坐标
+                    new OpenLayers.Control.Navigation(),    //鼠标滚轮可放大缩小地图
+                    new OpenLayers.Control.LayerSwitcher()  //图层切换控件
+                ]
+            });
+//              添加矢量图层
+            layer = new Zondy.Map.Layer("MDZZ", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界河流"],
+                    {
+                        ip: "127.0.0.1",//服务器ip
+                        port: "6163",   //端口
+                        isBaseLayer: true   //设为基础图层 !此项不写地图无法加载
+                    });
+//            将图层添加到地图容器中
+            map.addLayer(layer);
+            <!--设置地图显示中心坐标,地图缩放等级-->
+            map.setCenter(new OpenLayers.LonLat(0, 0), 2);
+        }
+        function addLineFeature() {
+//            创建一个数组用于存储点坐标
+            var pntObj = new Array();
+//            传入点的坐标
+            pntObj[0]=new Zondy.Object.Point2D(50,20);
+            pntObj[1]=new Zondy.Object.Point2D(111,30);
+//            创建弧段
+            <!--弧段由多个点构成, 两个点构成的弧段为直线-->
+            var Arc = new Zondy.Object.Arc(pntObj);
+//            创建折线
+            <!--折线由多个弧段构成,一个有两个点构成的弧段构成一条直线-->
+            var anyLine = new Zondy.Object.AnyLine([Arc]);
+//          创建线
+            var gLine = new Zondy.Object.GLine(anyLine);
+//            设置线要素的几何信息
+            var fGeom = new Zondy.Object.FeatureGeometry({LinGeom: [gLine]});
+
+
+
+//            描述线要素的符号参数信息
+            var lineInfo = new Zondy.Object.CLineInfo({
+                Color: 15, //线颜色
+                LinStyleID: 5, //线形状
+                LinWidth: 10,    //线宽
+                Yscale: 10,     //x比例系数
+                Xscale: 10      //y比例系数
+            });
+
+
+//            设置当前线要素的图形参数
+            var WebGraphicInfo = new Zondy.Object.WebGraphicsInfo({
+                InfoType: 2,  //图形参数为线类型 1为点,2为线,3为区
+                LinInfo: lineInfo //传入符号信息
+            });
+
+
+
+//            设置属性结构
+            var attStruct =new Zondy.Object.CAttStruct({
+                FldName:["ID","长度","NAME","SYSTEM","FID1","118645","CNAME"],//字段名称
+                FldNumber:7,                                                  //字段数量
+                FldType:["long","double","string","string","long","long","string"] // 字段类型
+
+            });
+//            设置属性
+            var attValue =[111,111.0,'MDZZ','233',1,1,'黄河'];
+
+
+
+//            创建要素
+            var newFeature = new Zondy.Object.Feature({
+                fGeom: fGeom,                    //传入几何信息
+                GraphicInfo: WebGraphicInfo,     //传入图形信息
+                AttValue: attValue               //传入属性信息
+            });
+//          设置要素为点要素  1为点,2为线,3为区
+            newFeature.setFType(2);
+//            设置要更新的线的OID
+            newFeature.setFID(139);
+
+
+//            创建一个要素数据集
+            var featureSet = new Zondy.Object.FeatureSet();
+//            给要素集添加数据结构
+            featureSet.AttStructt = attStruct;
+//            添加要素到数据集中
+            featureSet.addFeature(newFeature);
+
+
+
+//            创建一个编辑服务类
+            var editService = new Zondy.Service.EditLayerFeature("gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界河流",
+                    {
+                        ip: "127.0.0.1", //服务器ip
+                        port: "6163"       //端口
+                    });
+//          将要素集添加到图层中并执行回调函数
+            editService.update(featureSet, onSuccess);
+        }
+
+        function onSuccess(result) {
+//            如果添加成功则返回结果
+            if(result){
+//                刷新地图
+                map.baseLayer.redraw(true);
+                alert("更新成功");//弹窗提示
+            }else{
+                alert("更新失败");//弹窗提示
+            }
+        }
+
+
+    </script>
+</head>
+<body onload="init()">
+<div>
+    <input type="button" class="ButtonLib" value="更新线要素" onclick="addLineFeature()">
+</div>
+<div id="map1"></div>
+
+</body>
+</html>
