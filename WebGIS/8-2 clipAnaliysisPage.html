@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+<script src="../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+<script src="../libs/OpenLayers.js" type="text/javascript"></script>
+<script src="../libs/zdclient.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    var map, layer0, layer1;
+    function init() {
+        map = new OpenLayers.Map('map1', {
+            controls: [
+                new OpenLayers.Control.MousePosition(),
+                new OpenLayers.Control.Navigation(),
+                new OpenLayers.Control.LayerSwitcher(),
+                new OpenLayers.Control.OverviewMap()
+            ]
+        });
+        layer0 = new Zondy.Map.Layer("Map", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界河流"], {
+            ip: "127.0.0.1",
+            port: "6163",
+            isBaseLayer: false
+        });
+        layer1 = new Zondy.Map.Layer("Line", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/背景图层"], {
+            ip: "127.0.0.1",
+            port: "6163",
+            isBaseLayer: true
+        });
+
+        map.addLayers([layer0, layer1]);
+        map.setCenter(new OpenLayers.LonLat(0, 0), 2);
+
+
+    }
+
+    /******************************裁剪分析****************************************/
+    function clipAnalysisByPolygon() {
+//            创建裁剪分析对象
+        var clipAnalysis = new Zondy.Service.ClipByPolygon({
+            ip: "127.0.0.1",
+            port: "6163"
+        });
+
+//            设置被裁减图层url
+        clipAnalysis.srcInfo = "gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界河流";
+        clipAnalysis.desInfo = "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/裁剪结果" + getCurrentTime();
+        clipAnalysis.strPos = "-97,16,-31,16,-29,-32,-96,-29";
+
+        clipAnalysis.execute(AnalysisSuccess);
+
+        function AnalysisSuccess(data) {
+
+            if (data.results) {
+                if (data.results.length != 0) {
+                    var resultLayer = new Zondy.Map.Layer("裁剪结果" + getCurrentTime(), ["gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/" + data.results[0].Value], {
+                        ip: "127.0.0.1",
+                        port: "6163",
+                        isBaseLayer: false
+                    });
+                    map.addLayer(resultLayer);
+                }
+            } else {
+                alert('MDZZ');
+            }
+        }
+
+        function getCurrentTime() {
+            var now = new Date();
+
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            var day = now.getDate();
+
+            var hh = now.getHours();
+            var mm = now.getMinutes();
+            var ss = now.getSeconds();
+
+            var clock = year + "-";
+
+            if (month < 10) clock += "0";
+            clock += month + "-";
+
+            if (day < 10) clock += "0";
+            clock += day + "-";
+
+            if (hh < 10) clock += "0";
+            clock += hh;
+
+            if (mm < 10) clock += "0";
+            clock += mm;
+
+            if (ss < 10) clock += "0";
+            clock += ss;
+            return (clock);
+        }
+
+
+    }
+
+
+</script>
+
+
+<body onload="init()">
+<div>
+    <input type="button" class="ButtonLib" value="裁剪图层" onclick="clipAnalysisByPolygon()">
+</div>
+<div id="map1">
+
+</div>
+
+</body>
+</html>
