@@ -20,6 +20,7 @@
                     new OpenLayers.Control.LayerSwitcher()//此控件处理伴随鼠标事件的地图浏览
                 ]
             });
+
             layer = new Zondy.Map.Layer("MDZZ", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界政区"], {
                 //传入矢量地图的url参数
                 ip: "127.0.0.1",//ip
@@ -164,3 +165,13 @@
 
 </body>
 </html>
+
+
+
+var points = new Array();
+points[0]=new Zondy.Object.Point2D(2,2);
+points[1]=new Zondy.Object.Point2D(2,2);
+
+var arc =new Zondy.Object.Arc(points);
+var anyLine =new Zondy.Object.AnyLine([arc]);
+var gReg=new Zondy.Object.GRegion([anyLine]);

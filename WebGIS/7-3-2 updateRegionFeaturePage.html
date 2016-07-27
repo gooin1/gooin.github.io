@@ -16,8 +16,8 @@
             map = new OpenLayers.Map('map1', {
                 controls: [
                     new OpenLayers.Control.MousePosition(),//此控件显示鼠标移动时，所在点的地理坐标
-                    new OpenLayers.Control.Navigation(),//图层切换控件
-                    new OpenLayers.Control.LayerSwitcher()//此控件处理伴随鼠标事件的地图浏览
+                    new OpenLayers.Control.Navigation(),//此控件处理伴随鼠标事件的地图浏览
+                    new OpenLayers.Control.LayerSwitcher()//图层切换控件
                 ]
             });
             layer = new Zondy.Map.Layer("MDZZ", ["gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界政区"], {
