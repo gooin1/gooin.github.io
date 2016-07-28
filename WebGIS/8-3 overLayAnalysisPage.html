@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+<script src="../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+<script src="../libs/OpenLayers.js" type="text/javascript"></script>
+<script src="../libs/zdclient.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var map, layer0, layer1, layer2;
+//    定义全局变量指定存储裁剪结果文件名
+    var resultName = "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铁铜叠加结果" + getCurrentTime();
+
+    function init() {
+
+        //            添加地图容器
+        map = new OpenLayers.Map("map1", {
+            controls: [
+                new OpenLayers.Control.LayerSwitcher(),//图层切换控件
+                new OpenLayers.Control.MousePosition(),//此控件显示鼠标移动时，所在点的地理坐标
+                new OpenLayers.Control.Navigation()//此控件处理伴随鼠标事件的地图浏览
+            ]
+        });
+        //创建图层
+        layer0 = new Zondy.Map.Layer("矿长背景图层", ["gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/矿长背景图层"], {
+            ip: "127.0.0.1",//ip
+            port: "6163",//端口
+            isBaseLayer: true//作为底图
+        });
+        //创建图层
+        layer1 = new Zondy.Map.Layer("Au", ["gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铜矿"], {
+            ip: "127.0.0.1",//ip
+            port: "6163",    //端口
+            isBaseLayer: false //不作为底图
+        });
+        //创建图层
+        layer2 = new Zondy.Map.Layer("Fe", ["gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铁矿"], {
+            ip: "127.0.0.1",     //ip
+            port: "6163",       //端口
+            isBaseLayer: false//不作为底图
+        });
+        //      将3个图层添加到地图中
+        map.addLayers([layer0, layer1, layer2]);
+        //        设置地图显示中心及缩放级别
+        map.setCenter(new OpenLayers.LonLat(0, 0), 1);
+    }
+
+    /************************叠加分析**************************/
+    function overLayAnalysis() {
+//        alert("");
+
+//        创建一个叠加分析的对象
+        var overLayAna = new Zondy.Service.OverlayByLayer({
+            ip: "127.0.0.1",                                            //ip
+            port: "6163",                                               //端口
+            srcInfo1: "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铜矿",//被叠加简单要素类的信息
+            srcInfo2: "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铁矿",//结果简单要素类信息
+            desInfo: resultName,                                        //调用全局变量指定存储路径及文件名
+            infoOptType: 0,                                              //共有部分的图形参数操作
+            overType: 1,                                                //叠加类型
+            isReCalculate: true,                                         //是否重算面积
+            radius: 0.001                                               //容差半径
+        });
+//        执行叠加分析并执行回调函数
+        overLayAna.execute(onSuccess);
+    }
+
+
+    function onSuccess(data) {
+        if (data.results) {
+            if (data.results.length != 0) {
+                var resultLayer = new Zondy.Map.Layer("铁铜叠加结果" + getCurrentTime(), [resultName], {
+                    ip: "127.0.0.1",
+                    port: "6163",
+                    isBaseLayer: false
+                });
+
+                map.addLayer(resultLayer);
+            }
+        } else {
+            alert("mdzz");
+        }
+    }
+
+
+    // /    获取当前时间函数
+    function getCurrentTime() {
+        //实例化一个日期对象
+        var now = new Date();
+
+        var year = now.getFullYear();	//四位数字返回年份。
+        var month = now.getMonth() + 1; //月份 (0 ~ 11)。
+        var day = now.getDate();        //一个月中的某一天 (1 ~ 31)
+
+        var hh = now.getHours();        //获取小时 0-23
+        var mm = now.getMinutes();      //获取分钟 0-59
+        var ss = now.getSeconds();      //获取秒 0-59
+
+//            定义一个对象存储时间
+        var clock = year + "-";   //2016-
+
+//            如果月份小于10则在月份前加0
+        if (month < 10) clock += "0";
+        clock += month + "-";      //2016-07-
+//            如果天数小于10则在天数前加0
+        if (day < 10) clock += "0";
+        clock += day + "-";         //2016-07-27-
+//            如果小时小于10则在小时前加0
+        if (hh < 10) clock += "0";
+        clock += hh;                //2016-07-27-21
+//            如果分钟小于10则在分钟前加0
+        if (mm < 10) clock += "0";
+        clock += mm;                //2016-07-27-2135
+//            如果秒数小于10则在秒数前加0
+        if (ss < 10) clock += "0";
+        clock += ss;                //2016-07-27-213523
+//            返回clock的值
+        return (clock);
+    }
+
+</script>
+
+
+<body onload="init()">
+<div>
+    <input type="button" class="ButtonLib" value="叠加分析" onclick="overLayAnalysis()"/>
+</div>
+
+<div id="map1"></div>
+</body>
+</html>

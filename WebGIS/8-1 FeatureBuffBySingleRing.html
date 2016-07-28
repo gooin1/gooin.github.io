@@ -43,7 +43,7 @@
     <!-------------------单圈缓冲区分析------------------- -->
     function singleBuffAnalysis() {
 
-//        创建区要素
+//        创建多边形
         var gRegion = new Zondy.Object.GRegion([
             new Zondy.Object.AnyLine([
                 new Zondy.Object.Arc([
@@ -55,7 +55,8 @@
                 ])
             ])
         ]);
-//            创建一个数组用于此存放点
+
+////            创建一个数组用于此存放点
 //        var points = new Array();
 ////              用for循环传入四个点的坐标
 //        points[0]=new Zondy.Object.Point2D(0.46, 30.1);
@@ -64,7 +65,7 @@
 //        points[3] = new Zondy.Object.Point2D(58.77, 25.51);
 //        points[4] = new Zondy.Object.Point2D(41, 51);
 //
-////            构成区要素的弧段
+////            构成折线的弧段
 //        var arc = new Zondy.Object.Arc(points);
 ////            构成区要素的折线
 //        var anyLine = new Zondy.Object.AnyLine([arc]);
@@ -120,8 +121,21 @@
 //            将要素添加到数据集中
         featureSet.addFeature(feature);
 
+        //          创建一个编辑服务类
+        var editService = new Zondy.Service.EditLayerFeature("gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界政区",
+                {
+                    ip: "127.0.0.1", //服务器ip
+                    port: "6163"       //端口
+                });
 
-        //        实例化单圈缓冲区分析对象
+//     将要素数据集添加到图层中并使用回调函数
+        editService.add(featureSet);
+
+
+
+
+
+//        实例化单圈缓冲区分析对象
         var featureBuffBySR = new Zondy.Service.FeatureBuffBySingleRing({
             ip: "127.0.0.1",
             port: "6163",
@@ -135,22 +149,13 @@
         featureBuffBySR.attStructXML = $.toJSON([attStruct]);//属性结构
         featureBuffBySR.attRowsXML = $.toJSON([valueRow]);//属性值
         featureBuffBySR.traceRadius = 0.0001;  //跟踪半径
-
-//        设置生成的缓冲区要素的存放路径及文件名
+//        设置生成的缓冲区要素的存放路径及文件名 //必填!!
         featureBuffBySR.resultName = "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/缓冲结果" + getCurrentTime();
+
 //          执行缓冲区分析并调用回调函数
         featureBuffBySR.execute(AnalysisSuccess);
 
 
-//          创建一个编辑服务类
-        var editService = new Zondy.Service.EditLayerFeature("gdbp://MapGisLocal/OpenLayerVecterMap/ds/世界地图经纬度/sfcls/世界政区",
-                {
-                    ip: "127.0.0.1", //服务器ip
-                    port: "6163"       //端口
-                });
-
-//            将要素数据集添加到图层中并使用回调函数
-            editService.add(featureSet);
 
     }
 
@@ -173,6 +178,7 @@
             alert('缓冲失败,请检查参数');//弹窗提醒
         }
     }
+
 
     //              获取当前时间函数
     function getCurrentTime() {
