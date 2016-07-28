@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<link href="../css/mapDefault.css" type="text/css" rel="stylesheet"/>
+<script src="../libs/jquery-1.11.2.min.js" type="text/javascript"></script>
+<script src="../libs/OpenLayers.js" type="text/javascript"></script>
+<script src="../libs/zdclient.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var map, layer;
+    var resultLayerName = "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/多重类缓冲分析结果" + getCurrentTime();
+
+    function init() {
+        map = new OpenLayers.Map("map1");
+        layer = new Zondy.Map.Layer("MDzz", ["gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铜矿"], {
+            ip: "127.0.0.1",
+            port: '6163',
+            isBaseLayer: true
+        });
+        map.addControls([
+            new OpenLayers.Control.MousePosition(),
+            new OpenLayers.Control.LayerSwitcher(),
+            new OpenLayers.Control.Navigation()
+        ]);
+        map.addLayer(layer);
+        map.setCenter(new OpenLayers.LonLat(0, 0), 2);
+    }
+    /*******************************多重类缓冲分析**********************************/
+    function classBuffByMultiRing() {
+        clearA();
+        var classBuffAnalysis = new Zondy.Service.ClassBufferByMultiplyRing({
+            ip: "127.0.0.1",
+            port: "6163",
+            radiusStr: "15,34,50,80",
+            srcInfo: "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铜矿",
+            desInfo: resultLayerName
+        });
+        classBuffAnalysis.execute(onSuccess);
+    }
+
+    function onSuccess(data) {
+        if (data.results) {
+            if (data.results.length != 0) {
+                var resultLayer = new Zondy.Map.Layer("多重类缓冲分析结果" + getCurrentTime(), [resultLayerName], {
+                    ip: "127.0.0.1",
+                    port: "6163",
+                    isBaseLayer: false
+                });
+            }
+            map.addLayer(resultLayer);
+        } else {
+            alert("缓冲失败!");
+        }
+    }
+
+    //    获取当前时间函数
+    function getCurrentTime() {
+        //实例化一个日期对象
+        var now = new Date();
+
+        var year = now.getFullYear();	//四位数字返回年份。
+        var month = now.getMonth() + 1; //月份 (0 ~ 11)。
+        var day = now.getDate();        //一个月中的某一天 (1 ~ 31)
+
+        var hh = now.getHours();        //获取小时 0-23
+        var mm = now.getMinutes();      //获取分钟 0-59
+        var ss = now.getSeconds();      //获取秒 0-59
+
+//            定义一个对象存储时间
+        var clock = year + "-";   //2016-
+
+//            如果月份小于10则在月份前加0
+        if (month < 10) clock += "0";
+        clock += month + "-";      //2016-07-
+//            如果天数小于10则在天数前加0
+        if (day < 10) clock += "0";
+        clock += day + "-";         //2016-07-27-
+//            如果小时小于10则在小时前加0
+        if (hh < 10) clock += "0";
+        clock += hh;                //2016-07-27-21
+//            如果分钟小于10则在分钟前加0
+        if (mm < 10) clock += "0";
+        clock += mm;                //2016-07-27-2135
+//            如果秒数小于10则在秒数前加0
+        if (ss < 10) clock += "0";
+        clock += ss;                //2016-07-27-213523
+//            返回clock的值
+        return (clock);
+    }
+
+    function clearA() {
+        if (map.layers.length > 1) {
+            for (var i = map.layers.length-1; i > 0; i--) {
+                map.removeLayer(map.layers[i], false);
+            }
+        }
+
+    }
+
+</script>
+
+<body onload="init()">
+<div>
+    <input type="button" class="ButtonLib" value="多重类缓冲分析" onclick="classBuffByMultiRing()">
+    <input type="button" class="ButtonLib" value="清除缓冲图层" onclick=" clearA()">
+</div>
+
+<div id="map1"></div>
+
+</body>
+</html>
