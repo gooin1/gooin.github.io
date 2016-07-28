@@ -67,20 +67,23 @@
         overLayAna.execute(onSuccess);
     }
 
-
+//            回调函数
     function onSuccess(data) {
+//          如果获取到结果
         if (data.results) {
+//          如果获取的结果数组元素数量不为0
             if (data.results.length != 0) {
+//                新建图层存储缓冲区分析结果
                 var resultLayer = new Zondy.Map.Layer("铁铜叠加结果" + getCurrentTime(), [resultName], {
-                    ip: "127.0.0.1",
-                    port: "6163",
-                    isBaseLayer: false
+                    ip: "127.0.0.1",  //ip
+                    port: "6163",       //端口
+                    isBaseLayer: false      //不为基础图层
                 });
 
-                map.addLayer(resultLayer);
+                map.addLayer(resultLayer);//将图层添加到地图容器中
             }
         } else {
-            alert("mdzz");
+            alert("mdzz");//弹窗提醒
         }
     }
 

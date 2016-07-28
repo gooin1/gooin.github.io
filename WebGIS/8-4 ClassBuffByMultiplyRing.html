@@ -14,45 +14,57 @@
     var resultLayerName = "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/多重类缓冲分析结果" + getCurrentTime();
 
     function init() {
-        map = new OpenLayers.Map("map1");
-        layer = new Zondy.Map.Layer("MDzz", ["gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铜矿"], {
-            ip: "127.0.0.1",
-            port: '6163',
-            isBaseLayer: true
+        //            添加地图容器
+        map = new OpenLayers.Map("map1", {
+            controls: [
+                new OpenLayers.Control.LayerSwitcher(),//图层切换控件
+                new OpenLayers.Control.MousePosition(),//此控件显示鼠标移动时，所在点的地理坐标
+                new OpenLayers.Control.Navigation()//此控件处理伴随鼠标事件的地图浏览
+            ]
         });
-        map.addControls([
-            new OpenLayers.Control.MousePosition(),
-            new OpenLayers.Control.LayerSwitcher(),
-            new OpenLayers.Control.Navigation()
-        ]);
-        map.addLayer(layer);
+        //创建图层
+        layer= new Zondy.Map.Layer("MDZZ", ["gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铜矿"], {
+            ip: "127.0.0.1",//ip
+            port: "6163",//端口
+            isBaseLayer: true//作为底图
+        });
+        //      将图层添加到地图中
+        map.addLayers([layer]);
+        //        设置地图显示中心及缩放级别
         map.setCenter(new OpenLayers.LonLat(0, 0), 2);
     }
     /*******************************多重类缓冲分析**********************************/
     function classBuffByMultiRing() {
+//        调用函数清理图层
         clearA();
+//        实例化一个多重类缓冲分析对象
         var classBuffAnalysis = new Zondy.Service.ClassBufferByMultiplyRing({
-            ip: "127.0.0.1",
-            port: "6163",
-            radiusStr: "15,34,50,80",
-            srcInfo: "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铜矿",
-            desInfo: resultLayerName
+            ip: "127.0.0.1",                                    //ip
+            port: "6163",                                       //端口
+            radiusStr: "15,34,50,80",                           //缓冲半径(由内向外)
+            srcInfo: "gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/铜矿",  //要缓冲的图层
+            desInfo: resultLayerName                                      //缓冲结果存储路径及命名
         });
+//        执行多重类缓冲分析
         classBuffAnalysis.execute(onSuccess);
     }
 
+//    回调函数
     function onSuccess(data) {
+//          如果获取到结果
         if (data.results) {
+//          如果获取的结果数组元素数量不为0
             if (data.results.length != 0) {
+//                新建图层存储缓冲区分析结果
                 var resultLayer = new Zondy.Map.Layer("多重类缓冲分析结果" + getCurrentTime(), [resultLayerName], {
-                    ip: "127.0.0.1",
-                    port: "6163",
-                    isBaseLayer: false
+                    ip: "127.0.0.1",//ip
+                    port: "6163",//端口
+                    isBaseLayer: false//不为基础图层
                 });
             }
-            map.addLayer(resultLayer);
+            map.addLayer(resultLayer);//将图层添加到地图容器中
         } else {
-            alert("缓冲失败!");
+            alert("缓冲失败!");//弹窗提醒
         }
     }
 
@@ -90,10 +102,12 @@
 //            返回clock的值
         return (clock);
     }
-
+//      清理图层函数
     function clearA() {
+//        如果图层数量大于1 (要留下基础图层)
         if (map.layers.length > 1) {
             for (var i = map.layers.length-1; i > 0; i--) {
+//                删除除基础图层外的图层
                 map.removeLayer(map.layers[i], false);
             }
         }
