@@ -50,129 +50,21 @@
     <script type="text/javascript">
       var map;
       var layer;
-      var drawLayer;
-      var drawControl;
-      var highLtLayer;
-
-      function init() {
-//            创建地图容器
-        map = new OpenLayers.Map("map2", {
-//            添加控件
-          controls: [
-            new OpenLayers.Control.Navigation(),
+    function init() {
+        map = new OpenLayers.Map("map2");
+        layer = new Zondy.Map.Layer("MDzz", ["gdbp://MapGisLocal/OpenLayerVecterMap/sfcls/多重类缓冲分析结果2016-07-28-153614"], {
+            ip: "127.0.0.1",
+            port: '6163',
+            isBaseLayer: true
+        });
+        map.addControls([
             new OpenLayers.Control.MousePosition(),
             new OpenLayers.Control.LayerSwitcher(),
-            new OpenLayers.Control.OverviewMap()
-          ]
-        });
-
-        layer = new Zondy.Map.Doc("BaseLayer", "WorldMKT", {
-          ip: "127.0.0.1",
-          port: "6163",
-          isBaseLayer: true
-        });
-//          添加图层
-        map.addLayers([layer]);
-//            设置显示中心和级别
-        map.setCenter(new OpenLayers.LonLat(5506940,4985155), 2);
-        initDraw();
-      }
-      function showChina() {
-        map.setCenter(new OpenLayers.LonLat(11544046, 4312771), 4);
-      }
-
-
-      function initDraw() {
-//            添加一个绘制图层
-        drawLayer = new OpenLayers.Layer.Vector("DrawLayer");
-        map.addLayer(drawLayer);
-//          创建并添加控件  点
-        drawControl = new OpenLayers.Control.DrawFeature(drawLayer, OpenLayers.Handler.RegularPolygon);
-
-        drawControl.featureAdded = callBack;
-        map.addControl(drawControl);
-      }
-      function initHighLtLayer() {
-//            添加一个用于高亮显示的图层
-        highLtLayer = new OpenLayers.Layer.Vector("Highlight");
-        map.addLayer(highLtLayer);
-      }
-
-
-
-      function callBack(feature) {
-//            创建查询结构
-        var queryStruct = new Zondy.Service.QueryFeatureStruct(
-                {
-//                        要查询的信息
-                  IncludeGeometry: true,
-                  IncludeAttribute: true,
-                  IncludeGraphic: true
-                }
-        );
-//          	创建查询形状
-//            var pointObj = new Zondy.Object.PointForQuery();
-////            传入OpenLayer的点的坐标
-//            pointObj.setByOL(feature.geometry);
-
-
-        var polygonObj = new Zondy.Object.Polygon();
-        polygonObj.setByOL(feature.geometry);
-
-//            在点击下一个点时清除之前的点
-        feature.destroy();
-//            创建查询参数
-        var queryParm = new Zondy.Service.QueryParameter(
-                {
-                  geometry:polygonObj,
-
-                  resultFormat:"json",
-                  struct:queryStruct
-                });
-//            创建查询服务
-        var queryService =new Zondy.Service.QueryDocFeature(queryParm,"WorldMKT",1,{
-          ip:"127.0.0.1",
-          port:"6163"
-        });
-
-
-        queryService.query(onSuccess);
-
-      }
-
-
-      function startQuery() {
-        if (drawControl) {
-//                激活绘图控件
-          drawControl.activate();
-          drawControl.handler.setOptions({sides: 4});//设置绘制4边形
-
-        }
-
-      }
-
-
-      function onSuccess(data) {
-        var formatData = JSON.stringify(data);
-        Process(formatData, 1, "resultTable");
-//            如果存在已经高亮的图层则销毁,通过initHighLtLayer()重建要高亮显示的新图层
-        if(highLtLayer) {
-          highLtLayer.destroy();
-        }
-
-
-        //初始化高亮图层
-        initHighLtLayer();
-//            高亮显示
-        var format = new Zondy.Format.PolygonJSON();
-        var features = format.read(data);
-        highLtLayer.setVisibility(true);//将图层设为可见
-        highLtLayer.addFeatures(features);//将要素添加到图层中
-
-      }
-
-
-
+            new OpenLayers.Control.Navigation()
+        ]);
+        map.addLayer(layer);
+        map.setCenter(new OpenLayers.LonLat(0, 0), 2);
+    }
     </script>
 
 
