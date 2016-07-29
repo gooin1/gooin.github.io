@@ -37,7 +37,7 @@ aside {
     text-transform: uppercase;
 }
 
-.ButtonLib:hover, a.add:hover, a.show:hover {
+.ButtonLib:hover {
 
     background-color: #1c94c4;
     color: #fff;

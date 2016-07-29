@@ -26,13 +26,14 @@
                     }
             );
 //              添加图层
-            vectorMapdoc = new Zondy.Map.Doc("MyMap", "WorldMKT",
+            vectorMapdoc = new Zondy.Map.Doc("MyMap", "world",
                     <!--'MyMap'为自定义的图层名-->
                     <!--'WorldMKT'为已经发布的地图-->
                     {
                         ip: "127.0.0.1",   //ip
                         port: "6163",      //端口
-                        isBaseLayer: true   //设为基础图层
+                        isBaseLayer: true  //设为基础图层
+
                     });
 //            将图层添加到地图容器中
             map.addLayers([vectorMapdoc]);
@@ -52,8 +53,7 @@
 <body onload="init()">
 
 <div id="header">
-    <h1>Example</h1>
-    <p>show map</p>
+
 </div>
 
 <div id="map1">
