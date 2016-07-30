@@ -19,7 +19,7 @@ $.extend(_5,{width:_3.width,height:_3.height});
 cc._size(_5);
 var _7=0;
 var _8="auto";
-var _9=cc.find(">.panel>.accordion-header");
+var _9=cc.find(">.panel>.accordion.html-header");
 if(_9.length){
 _7=$(_9[0]).css("height","")._outerHeight();
 }
@@ -87,9 +87,9 @@ function _1f(_20){
 var _21=$.data(_20,"accordion").options;
 var cc=$(_20);
 if(_21.border){
-cc.removeClass("accordion-noborder");
+cc.removeClass("accordion.html-noborder");
 }else{
-cc.addClass("accordion-noborder");
+cc.addClass("accordion.html-noborder");
 }
 };
 function _22(_23){
@@ -112,7 +112,7 @@ return false;
 };
 function _27(_28,pp,_29){
 var _2a=$.data(_28,"accordion").options;
-pp.panel($.extend({},{collapsible:true,minimizable:false,maximizable:false,closable:false,doSize:false,collapsed:true,headerCls:"accordion-header",bodyCls:"accordion-body"},_29,{onBeforeExpand:function(){
+pp.panel($.extend({},{collapsible:true,minimizable:false,maximizable:false,closable:false,doSize:false,collapsed:true,headerCls:"accordion.html-header",bodyCls:"accordion.html-body"},_29,{onBeforeExpand:function(){
 if(_29.onBeforeExpand){
 if(_29.onBeforeExpand.call(this)==false){
 return false;
@@ -127,8 +127,8 @@ _33(_28,_18(_28,all[i]));
 }
 }
 var _2b=$(this).panel("header");
-_2b.addClass("accordion-header-selected");
-_2b.find(".accordion-collapse").removeClass("accordion-expand");
+_2b.addClass("accordion.html-header-selected");
+_2b.find(".accordion.html-collapse").removeClass("accordion.html-expand");
 },onExpand:function(){
 if(_29.onExpand){
 _29.onExpand.call(this);
@@ -141,8 +141,8 @@ return false;
 }
 }
 var _2c=$(this).panel("header");
-_2c.removeClass("accordion-header-selected");
-_2c.find(".accordion-collapse").addClass("accordion-expand");
+_2c.removeClass("accordion.html-header-selected");
+_2c.find(".accordion.html-collapse").addClass("accordion.html-expand");
 },onCollapse:function(){
 if(_29.onCollapse){
 _29.onCollapse.call(this);

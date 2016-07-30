@@ -8,7 +8,7 @@
  *
  */
 /**
- * accordion - jQuery EasyUI
+ * accordion.html - jQuery EasyUI
  * 
  * Dependencies:
  * 	 panel
@@ -31,7 +31,7 @@
 		cc._size(opts);
 		var headerHeight = 0;
 		var bodyHeight = 'auto';
-		var headers = cc.find('>.panel>.accordion-header');
+		var headers = cc.find('>.panel>.accordion.html-header');
 		if (headers.length){
 			headerHeight = $(headers[0]).css('height', '')._outerHeight();
 		}
@@ -119,9 +119,9 @@
 		var opts = $.data(container, 'accordion').options;
 		var cc = $(container);
 		if (opts.border){
-			cc.removeClass('accordion-noborder');
+			cc.removeClass('accordion.html-noborder');
 		} else {
-			cc.addClass('accordion-noborder');
+			cc.addClass('accordion.html-noborder');
 		}
 	}
 	
@@ -157,8 +157,8 @@
 			closable: false,
 			doSize: false,
 			collapsed: true,
-			headerCls: 'accordion-header',
-			bodyCls: 'accordion-body'
+			headerCls: 'accordion.html-header',
+			bodyCls: 'accordion.html-body'
 		}, options, {
 			onBeforeExpand: function(){
 				if (options.onBeforeExpand){
@@ -174,8 +174,8 @@
 					}
 				}
 				var header = $(this).panel('header');
-				header.addClass('accordion-header-selected');
-				header.find('.accordion-collapse').removeClass('accordion-expand');
+				header.addClass('accordion.html-header-selected');
+				header.find('.accordion.html-collapse').removeClass('accordion.html-expand');
 			},
 			onExpand: function(){
 				if (options.onExpand){options.onExpand.call(this)}
@@ -186,8 +186,8 @@
 					if (options.onBeforeCollapse.call(this) == false){return false}
 				}
 				var header = $(this).panel('header');
-				header.removeClass('accordion-header-selected');
-				header.find('.accordion-collapse').addClass('accordion-expand');
+				header.removeClass('accordion.html-header-selected');
+				header.find('.accordion.html-collapse').addClass('accordion.html-expand');
 			},
 			onCollapse: function(){
 				if (options.onCollapse){options.onCollapse.call(this)}

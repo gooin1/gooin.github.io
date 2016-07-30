@@ -532,7 +532,7 @@ if(!_73){
 return;
 }
 var _75=_73==$("body")[0];
-var s=$(_73).find("div.panel:visible,div.accordion:visible,div.tabs-container:visible,div.layout:visible,.easyui-fluid:visible").filter(function(_76,el){
+var s=$(_73).find("div.panel:visible,div.accordion.html:visible,div.tabs-container:visible,div.layout:visible,.easyui-fluid:visible").filter(function(_76,el){
 var p=$(el).parents(".panel-"+_74+":first");
 return _75?p.length==0:p[0]==_73;
 });

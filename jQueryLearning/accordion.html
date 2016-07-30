@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JavaScript &amp; jQuery - Chapter 11: Content Panels -  Accordion</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/accordion.css" />
+</head>
+
+<body>
+
+<header><h1>Monsieur Pigeon</h1></header>
+
+<section class="page">
+    <ul class="accordion">
+        <li>
+            <button class="accordion-control">Classics</button>
+            <div class="accordion-panel">
+                <ul>
+                    <li><a onclick="initDocMap()">矢量地图文档显示</a></li>
+                    <li><a onclick="initTileLayer()">瓦片地图文档显示</a></li>
+                    <li><a onclick="initVectorLayer()">矢量地图显示</a></li>
+                    <li><a onclick="initOnlineMap()">第三方地图显示(GoogleMap)</a></li>
+                </ul>
+
+            </div>
+        </li>
+        <li>
+            <button class="accordion-control">The Flower Series</button>
+            <div class="accordion-panel">
+                <p>Take your tastebuds for a gentle stroll through an English garden filled with Monsieur Pigeon's beautifully fragrant Flower Series marshmallows. With three sweetly floral options: <strong>Elderberry</strong>, <strong>Rose Petal</strong>, and <strong>Chrysanthemum</strong> - all edible and all naturally flavored - they will have you dreaming of butterflies and birdsong in no time.</p>
+            </div>
+        </li>
+        <li>
+            <button class="accordion-control">Salt o' The Sea</button>
+            <div class="accordion-panel">
+                <p>Ahoy! If you long for a taste of organic sea salt mixed in with your sweet Monsieur Pigeon marshmallows, look no further than our Salt o' the Sea range. Featuring two delicious flavors: <strong>Salted Caramel</strong> and <strong>Cashew Butter</strong>, this sweetly salty duo will expand your taste horizons.</p>
+            </div>
+        </li>
+    </ul>
+</section>
+
+
+<script src="js/jquery-1.11.0.min.js"></script>
+<script src="js/accordion.js"></script>
+
+</body>
+</html>
